@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent as FC } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
@@ -7,10 +7,31 @@ import { withRouter } from 'react-router-dom';
 
 type NavBarProps = {
   history: any;
+  location: any;
+  //   user: {
+  //     username: string;
+  //     token: string;
+  //   };
 };
 
-const NavBar: FC<NavBarProps> = ({ history }) => {
-  const [value, setValue] = useState(0);
+const NavBar: React.FC<NavBarProps> = ({ history, location }) => {
+  const [path, setPath] = useState(0);
+  console.log(1);
+  useEffect(() => {
+    if (path !== location.pathname) {
+      if (location.pathname === '/') {
+        setPath(0);
+      }
+
+      if (location.pathname === '/locations') {
+        setPath(1);
+      }
+
+      if (location.pathname === '/users') {
+        setPath(2);
+      }
+    }
+  });
 
   const a11yProps = (index: number) => {
     return {
@@ -20,7 +41,7 @@ const NavBar: FC<NavBarProps> = ({ history }) => {
   };
 
   const handleChange = (event: any, newValue: any) => {
-    setValue(newValue);
+    setPath(newValue);
     if (newValue === 0) {
       history.push('/');
     }
@@ -37,7 +58,7 @@ const NavBar: FC<NavBarProps> = ({ history }) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs value={path} onChange={handleChange}>
           <Tab label="Отправления" {...a11yProps(0)} />
 
           <Tab label="Пользователи" {...a11yProps(1)} />
@@ -46,7 +67,7 @@ const NavBar: FC<NavBarProps> = ({ history }) => {
         </Tabs>
 
         {/* <Typography variant="h6" className={classes.title}>
-          {isAuth.user.username}
+          {user.username}
         </Typography>
         <ExitToApp id="logout" onClick={signOut} /> */}
       </Toolbar>
