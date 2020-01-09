@@ -1,50 +1,57 @@
-import React from "react";
-import {
-  fade,
-  makeStyles,
-  Theme,
-  createStyles
-} from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import { Link } from "react-router-dom";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import React, { useState, FunctionComponent as FC } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { withRouter } from 'react-router-dom';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1
-    },
-    nav: {
-      display: "flex",
-      flexWrap: "wrap"
-    },
-    tab: {
-      color: "white"
+type NavBarProps = {
+  history: any;
+};
+
+const NavBar: FC<NavBarProps> = ({ history }) => {
+  const [value, setValue] = useState(0);
+
+  const a11yProps = (index: number) => {
+    return {
+      id: `action-tab-${index}`,
+      'aria-controls': `action-tabpanel-${index}`
+    };
+  };
+
+  const handleChange = (event: any, newValue: any) => {
+    setValue(newValue);
+    if (newValue === 0) {
+      history.push('/');
     }
-  })
-);
 
-export default function NavVar() {
-  const classes = useStyles();
+    if (newValue === 1) {
+      history.push('/locations');
+    }
+
+    if (newValue === 2) {
+      history.push('/users');
+    }
+  };
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" className={classes.tab}>
-          <Link to="/">Отправления</Link>
-        </Typography>
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Отправления" {...a11yProps(0)} />
 
-        <Typography variant="h6" className={classes.tab}>
-          <Link to="/">Отправления</Link>
-        </Typography>
+          <Tab label="Пользователи" {...a11yProps(1)} />
 
-        <Typography variant="h6" className={classes.tab}>
-          <Link to="/">Отправления</Link>
+          <Tab label="Локации" {...a11yProps(2)} />
+        </Tabs>
+
+        {/* <Typography variant="h6" className={classes.title}>
+          {isAuth.user.username}
         </Typography>
+        <ExitToApp id="logout" onClick={signOut} /> */}
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+export default withRouter(NavBar);
