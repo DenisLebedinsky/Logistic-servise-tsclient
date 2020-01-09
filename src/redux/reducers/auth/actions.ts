@@ -1,8 +1,9 @@
 import { action } from "typesafe-actions";
 
-import { AuthActionTypes, successData } from "./types";
+import { AuthActionTypes, successData, authData } from "./types";
 
-export const login = () => action(AuthActionTypes.LOG_IN);
+export const login = (authData: authData) =>
+  action(AuthActionTypes.LOG_IN, authData);
 
 export const loginSuccess = (successData: successData) =>
   action(AuthActionTypes.LOG_IN_SUCCESS, { user: successData });

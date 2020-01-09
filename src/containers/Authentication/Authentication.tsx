@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Container, TextField, Button } from "@material-ui/core";
 import styles from "./Authentication.module.scss";
+import { login } from "../../redux/reducers/auth/actions";
 
 export default function Authentication() {
   const [login, setlogin] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const error = false;
   const changeLogin = (e: any) => {
