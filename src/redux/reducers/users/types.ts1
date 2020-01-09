@@ -1,0 +1,11 @@
+export type Auth = {
+  loading: boolean;
+  token: string;
+  error: string;
+};
+
+export enum UserActionTypes {
+  GET_USERS = "@@users/GET_USERS",
+  GET_USERS_SUCCESS = "@@users/GET_USERS_SUCCESS",
+  GET_USERS_FAIL = "@@users/GET_USERS_FAIL"
+}

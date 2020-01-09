@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 100%;
+  margin-top: 25%;
+}
+
+.textField {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.button {
+  margin: 10px;
+}

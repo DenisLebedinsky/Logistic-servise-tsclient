@@ -1,57 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import useReactRouter from "use-react-router";
+import { getUser } from "../../redux/reducers/auth/selectors";
+import {} from "../../redux/reducers/auth/actions";
 
-type NavBarProps = {
-  history: any;
-  location: any;
-  //   user: {
-  //     username: string;
-  //     token: string;
-  //   };
-};
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
-const NavBar: React.FC<NavBarProps> = ({ history, location }) => {
+const NavBar: React.FC = () => {
   const [path, setPath] = useState(0);
-  console.log(1);
+  const { history, location } = useReactRouter();
+  const dispatch = useDispatch();
+
+  getUser();
+
   useEffect(() => {
-    if (path !== location.pathname) {
-      if (location.pathname === '/') {
-        setPath(0);
-      }
+    if (location.pathname === "/" && path !== 0) {
+      setPath(0);
+    }
 
-      if (location.pathname === '/locations') {
-        setPath(1);
-      }
+    if (location.pathname === "/locations" && path !== 1) {
+      setPath(1);
+    }
 
-      if (location.pathname === '/users') {
-        setPath(2);
-      }
+    if (location.pathname === "/users" && path !== 2) {
+      setPath(2);
     }
   });
 
   const a11yProps = (index: number) => {
     return {
       id: `action-tab-${index}`,
-      'aria-controls': `action-tabpanel-${index}`
+      "aria-controls": `action-tabpanel-${index}`
     };
   };
 
   const handleChange = (event: any, newValue: any) => {
     setPath(newValue);
     if (newValue === 0) {
-      history.push('/');
+      history.push("/");
     }
 
     if (newValue === 1) {
-      history.push('/locations');
+      history.push("/locations");
     }
 
     if (newValue === 2) {
-      history.push('/users');
+      history.push("/users");
     }
   };
 
@@ -75,4 +72,4 @@ const NavBar: React.FC<NavBarProps> = ({ history, location }) => {
   );
 };
 
-export default withRouter(NavBar);
+export default NavBar;

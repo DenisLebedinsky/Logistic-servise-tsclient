@@ -1,12 +1,13 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import NavBar from './containers/NavBar';
-import Packages from './containers/Packages';
-import Locations from './containers/Locations';
-import Users from './containers/Users';
+import NavBar from "./containers/NavBar";
+import Authentication from "./containers/Authentication";
+import Packages from "./containers/Packages";
+import Locations from "./containers/Locations";
+import Users from "./containers/Users";
 
-import './App.scss';
+import "./App.scss";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,9 @@ const App: React.FC = () => {
       <Switch>
         <Route exact path="/">
           <Packages />
+        </Route>
+        <Route path="/login">
+          <Authentication />
         </Route>
         <Route path="/locations">
           <Locations />
