@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from 'react-redux';
 import useReactRouter from "use-react-router";
-import { getUser } from "../../redux/reducers/auth/selectors";
-import {} from "../../redux/reducers/auth/actions";
+// import { getUser } from '../../redux/reducers/auth/selectors';
+// import {} from "../../redux/reducers/auth/actions";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
+import React, { useEffect, useState } from "react";
+
 const NavBar: React.FC = () => {
   const [path, setPath] = useState(0);
   const { history, location } = useReactRouter();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  getUser();
+  // getUser();
 
   useEffect(() => {
     if (location.pathname === "/" && path !== 0) {

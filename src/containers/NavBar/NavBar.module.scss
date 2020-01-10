@@ -1,15 +1,17 @@
 .root {
   flex-grow: 1;
 }
+
 .nav {
-  display: 'flex';
-  flex-wrap: 'wrap';
+  display: "flex";
+  flex-wrap: "wrap";
 }
+
 .tab {
   margin: 0 25px !important;
 
   a {
+    color: #FFFFFF;
     text-decoration: none;
-    color: #fff;
   }
 }

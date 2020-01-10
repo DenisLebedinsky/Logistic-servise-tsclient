@@ -1,6 +1,3 @@
-import { useSelector } from "react-redux";
+import { AppState } from "../../store.type";
 
-export function getUser() {
-  const result = useSelector;
-  console.log(result);
-}
+export const getAuth = (state: AppState) => state.auth;

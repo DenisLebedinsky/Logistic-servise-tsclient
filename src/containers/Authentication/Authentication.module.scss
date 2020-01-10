@@ -1,10 +1,10 @@
 .container {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   flex-direction: column;
-  max-width: 100%;
+  justify-content: center;
   margin-top: 25%;
+  max-width: 100%;
 }
 
 .textField {
