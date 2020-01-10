@@ -1,14 +1,14 @@
 // import { useDispatch } from 'react-redux';
-import useReactRouter from "use-react-router";
+import useReactRouter from 'use-react-router';
 // import { getUser } from '../../redux/reducers/auth/selectors';
 // import {} from "../../redux/reducers/auth/actions";
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 const NavBar: React.FC = () => {
   const [path, setPath] = useState(0);
@@ -18,15 +18,15 @@ const NavBar: React.FC = () => {
   // getUser();
 
   useEffect(() => {
-    if (location.pathname === "/" && path !== 0) {
+    if (location.pathname === '/' && path !== 0) {
       setPath(0);
     }
 
-    if (location.pathname === "/locations" && path !== 1) {
+    if (location.pathname === '/locations' && path !== 1) {
       setPath(1);
     }
 
-    if (location.pathname === "/users" && path !== 2) {
+    if (location.pathname === '/users' && path !== 2) {
       setPath(2);
     }
   });
@@ -34,22 +34,22 @@ const NavBar: React.FC = () => {
   const a11yProps = (index: number) => {
     return {
       id: `action-tab-${index}`,
-      "aria-controls": `action-tabpanel-${index}`
+      'aria-controls': `action-tabpanel-${index}`
     };
   };
 
   const handleChange = (event: any, newValue: any) => {
     setPath(newValue);
     if (newValue === 0) {
-      history.push("/");
+      history.push('/');
     }
 
     if (newValue === 1) {
-      history.push("/locations");
+      history.push('/locations');
     }
 
     if (newValue === 2) {
-      history.push("/users");
+      history.push('/users');
     }
   };
 

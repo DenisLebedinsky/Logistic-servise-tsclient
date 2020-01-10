@@ -1,14 +1,14 @@
-import { Reducer } from "redux";
+import { Reducer } from 'redux';
 
-import { Auth, AuthActionTypes } from "./types";
+import { Auth, AuthActionTypes } from './types';
 
 const initialState: Auth = {
   loading: false,
   user: {
-    username: "",
-    token: ""
+    username: '',
+    token: ''
   },
-  error: ""
+  error: ''
 };
 
 export const reducer: Reducer<Auth> = (state = initialState, action) => {

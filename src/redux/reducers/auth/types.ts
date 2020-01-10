@@ -8,9 +8,9 @@ export type Auth = {
 };
 
 export enum AuthActionTypes {
-  LOG_IN = "@@auth/LOG_IN",
-  LOG_IN_SUCCESS = "@@auth/LOG_IN_SUCCESS",
-  LOG_IN_FAIL = "@@auth/LOG_IN_FAIL"
+  LOG_IN = '@@auth/LOG_IN',
+  LOG_IN_SUCCESS = '@@auth/LOG_IN_SUCCESS',
+  LOG_IN_FAIL = '@@auth/LOG_IN_FAIL'
 }
 
 export type successData = {

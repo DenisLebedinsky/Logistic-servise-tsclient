@@ -1,27 +1,19 @@
-import { all, fork, put, takeEvery } from "redux-saga/effects";
+import { all, fork, put, takeEvery } from 'redux-saga/effects';
 
-import { api } from "../../../api";
+import api from '../../../api';
 
-import { AuthActionTypes, successData } from "./types";
-import { loginFail, loginStart, loginSuccess } from "./actions";
-
-export function* authSaga() {
-  yield all([fork(watchLoginSaga)]);
-}
-
-function* watchLoginSaga() {
-  yield takeEvery(AuthActionTypes.LOG_IN, loginSaga);
-}
+import { AuthActionTypes, successData } from './types';
+import { loginFail, loginStart, loginSuccess } from './actions';
 
 function* loginSaga(action: ReturnType<typeof loginStart>) {
   try {
     const successData: successData = yield api.post(
-      "/users/login",
+      '/users/login',
       action.payload
     );
 
     if (!successData) {
-      throw new Error("Index is out of range");
+      throw new Error('Index is out of range');
     }
 
     yield put(loginSuccess(successData));
@@ -29,3 +21,13 @@ function* loginSaga(action: ReturnType<typeof loginStart>) {
     yield put(loginFail(e.message));
   }
 }
+
+function* watchLoginSaga() {
+  yield takeEvery(AuthActionTypes.LOG_IN, loginSaga);
+}
+
+function* authSaga() {
+  yield all([fork(watchLoginSaga)]);
+}
+
+export default authSaga;

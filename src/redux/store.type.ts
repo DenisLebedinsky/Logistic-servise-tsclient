@@ -1,6 +1,6 @@
-import { Action, AnyAction, Dispatch } from "redux";
+import { Action, AnyAction, Dispatch } from 'redux';
 
-import reducers from "./reducers";
+import reducers from './reducers';
 
 export type AppState = ReturnType<typeof reducers>;
 

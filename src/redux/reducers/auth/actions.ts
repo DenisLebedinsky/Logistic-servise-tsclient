@@ -1,6 +1,6 @@
-import { action } from "typesafe-actions";
+import { action } from 'typesafe-actions';
 
-import { AuthActionTypes, authData, successData } from "./types";
+import { AuthActionTypes, authData, successData } from './types';
 
 export const loginStart = (authData: authData) =>
   action(AuthActionTypes.LOG_IN, authData);
