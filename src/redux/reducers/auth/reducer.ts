@@ -8,10 +8,10 @@ const initialState: Auth = {
     username: '',
     token: ''
   },
-  error: ''
+  error: false
 };
 
-export const reducer: Reducer<Auth> = (state = initialState, action) => {
+const reducer: Reducer<Auth> = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -25,3 +25,5 @@ export const reducer: Reducer<Auth> = (state = initialState, action) => {
       return state;
   }
 };
+
+export default reducer;

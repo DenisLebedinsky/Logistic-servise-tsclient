@@ -4,7 +4,7 @@ export type Auth = {
     username: string;
     token: string;
   };
-  error: string;
+  error: boolean;
 };
 
 export enum AuthActionTypes {
@@ -13,12 +13,17 @@ export enum AuthActionTypes {
   LOG_IN_FAIL = '@@auth/LOG_IN_FAIL'
 }
 
-export type successData = {
-  token: string;
-  username: string;
+export type SuccessData = {
+  status: number;
+  statusText: string;
+  data: {
+    token: string;
+    username: string;
+    error: boolean;
+  };
 };
 
-export type authData = {
+export type AuthData = {
   username: string;
   password: string;
 };

@@ -11,9 +11,11 @@ import styles from './Authentication.module.scss';
 export default function Authentication() {
   const [login, setlogin] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setErrors] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const auth = useSelector(getAuth);
-  const error = false;
 
   const changeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setlogin(e.target.value);
@@ -24,11 +26,16 @@ export default function Authentication() {
 
   const sendData = (e: any) => {
     e.preventDefault();
+    setErrors(false);
+    setLoading(true);
     dispatch(loginStart({ username: login, password }));
   };
 
   useEffect(() => {
     console.log(auth);
+    if (auth.error) {
+      setErrors(true);
+    }
   });
 
   return (
@@ -39,36 +46,42 @@ export default function Authentication() {
         autoComplete="off"
         onSubmit={sendData}
       >
-        <TextField
-          id="outlined-login"
-          label="Логин"
-          className={styles.textField}
-          value={login}
-          onChange={changeLogin}
-          margin="normal"
-          variant="outlined"
-          error={error}
-        />
-        <TextField
-          id="outlined-password-input"
-          label="Пароль"
-          type="password"
-          onChange={changePass}
-          className={styles.textField}
-          margin="normal"
-          variant="outlined"
-          value={password}
-          autoComplete="off"
-          error={error}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          className={styles.button}
-        >
-          Войти
-        </Button>
+        {loading ? (
+          <div>loading ...</div>
+        ) : (
+          <>
+            <TextField
+              id="outlined-login"
+              label="Логин"
+              className={styles.textField}
+              value={login}
+              onChange={changeLogin}
+              margin="normal"
+              variant="outlined"
+              error={error}
+            />
+            <TextField
+              id="outlined-password-input"
+              label="Пароль"
+              type="password"
+              onChange={changePass}
+              className={styles.textField}
+              margin="normal"
+              variant="outlined"
+              value={password}
+              autoComplete="off"
+              error={error}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={styles.button}
+            >
+              Войти
+            </Button>
+          </>
+        )}
       </form>
     </Container>
   );

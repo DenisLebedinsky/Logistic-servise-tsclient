@@ -2,17 +2,18 @@ import { all, fork, put, takeEvery } from 'redux-saga/effects';
 
 import api from '../../../api';
 
-import { AuthActionTypes, successData } from './types';
+import { AuthActionTypes, SuccessData } from './types';
 import { loginFail, loginStart, loginSuccess } from './actions';
 
 function* loginSaga(action: ReturnType<typeof loginStart>) {
   try {
-    const successData: successData = yield api.post(
+    const successData: SuccessData = yield api.post(
       '/users/login',
       action.payload
     );
 
-    if (!successData) {
+    debugger;
+    if (!successData || successData.data.error) {
       throw new Error('Index is out of range');
     }
 
