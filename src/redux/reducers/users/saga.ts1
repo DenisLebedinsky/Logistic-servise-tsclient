@@ -1,27 +1,24 @@
-import { all, fork, put, call, takeEvery } from "redux-saga/effects";
-import { Auth, UserActionTypes } from "./types";
-import { signIn } from "../../../api/auth";
-import { getUsers, getUsersSuccess, getUsersFail } from "./actions";
+import { all, fork, takeEvery } from "redux-saga/effects";
+import {  UserActionTypes } from "./types";
+//import api from "../../../api";
+//import { getUserInfo, getUserInfoSuccess, getUserInfoFail } from "./actions";
 
-export function* authSaga() {
-  yield all([fork(watchLoginSaga)]);
+export function* usersSaga() {
+  yield all([fork(watchUserInfoSaga)]);
 }
 
-function* watchLoginSaga() {
-  yield takeEvery(UserActionTypes.GET_USERS, loginSaga);
+function* watchUserInfoSaga() {
+  yield takeEvery(UserActionTypes.GET_USER_INFO, userInfoSaga);
 }
 
-function* loginSaga(data: any) {
+function* userInfoSaga(data: any) {
   console.log(data);
   try {
-    const token: string = yield signIn({ username: "ad", password: "efwf" });
+//    const token: string = yield api({ username: "ad", password: "efwf" });
 
-    if (!token) {
-      throw new Error("Index is out of range");
-    }
 
-    yield put(loginSuccess(token));
+    //yield put(loginSuccess(token));
   } catch (e) {
-    yield put(loginFail(e.message));
+  //  yield put(loginFail(e.message));
   }
 }

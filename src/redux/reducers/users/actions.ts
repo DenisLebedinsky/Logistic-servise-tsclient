@@ -9,3 +9,5 @@ export const getUsersSuccess = (token: string) =>
 
 export const loginFail = (err: string) =>
   action(UserActionTypes.GET_USERS_FAIL, { error: err });
+
+

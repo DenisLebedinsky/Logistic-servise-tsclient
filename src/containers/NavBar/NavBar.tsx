@@ -1,35 +1,61 @@
-// import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import useReactRouter from 'use-react-router';
-// import { getUser } from '../../redux/reducers/auth/selectors';
-// import {} from "../../redux/reducers/auth/actions";
-
+import { getAuth } from '../../redux/reducers/auth/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/reducers/auth/actions';
+import { getUserInfo } from '../../redux/reducers/users/actions';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
-import React, { useEffect, useState } from 'react';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import Typography from '@material-ui/core/Typography';
+import { Auth } from 'redux/reducers/auth/types';
+import styles from './NavBar.module.scss';
 
 const NavBar: React.FC = () => {
   const [path, setPath] = useState(0);
   const { history, location } = useReactRouter();
-  // const dispatch = useDispatch();
+  const auth: Auth = useSelector(getAuth);
 
-  // getUser();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!auth.user.token && location.pathname !== '/login') {
+      history.push('/login');
+    }
+  });
+
+  useEffect(() => {
+    if (
+      auth.user.token &&
+      (auth.user.username === '' ||
+        auth.user.locationId === '' ||
+        auth.user.role === '' ||
+        auth.user.id === '')
+    ) {
+      dispatch(getUserInfo(auth.user.token));
+    }
+  });
 
   useEffect(() => {
     if (location.pathname === '/' && path !== 0) {
       setPath(0);
     }
 
-    if (location.pathname === '/locations' && path !== 1) {
+    if (location.pathname === '/users' && path !== 1) {
       setPath(1);
     }
 
-    if (location.pathname === '/users' && path !== 2) {
+    if (location.pathname === '/locations' && path !== 2) {
       setPath(2);
     }
   });
+
+  const logOut = () => {
+    dispatch(logout());
+    history.push('/');
+  };
 
   const a11yProps = (index: number) => {
     return {
@@ -45,30 +71,39 @@ const NavBar: React.FC = () => {
     }
 
     if (newValue === 1) {
-      history.push('/locations');
+      history.push('/users');
     }
 
     if (newValue === 2) {
-      history.push('/users');
+      history.push('/locations');
     }
   };
 
+  console.log(auth.user.token);
+
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Tabs value={path} onChange={handleChange}>
-          <Tab label="Отправления" {...a11yProps(0)} />
+      {auth.user.token && (
+        <Toolbar className={styles.toolbar}>
+          <Tabs value={path} onChange={handleChange}>
+            <Tab label="Отправления" {...a11yProps(0)} />
 
-          <Tab label="Пользователи" {...a11yProps(1)} />
+            {auth && auth.user.role === 'admin' && (
+              <>
+                <Tab label="Пользователи" {...a11yProps(1)} />
+                <Tab label="Локации" {...a11yProps(2)} />
+              </>
+            )}
+          </Tabs>
 
-          <Tab label="Локации" {...a11yProps(2)} />
-        </Tabs>
-
-        {/* <Typography variant="h6" className={classes.title}>
-          {user.username}
-        </Typography>
-        <ExitToApp id="logout" onClick={signOut} /> */}
-      </Toolbar>
+          <div>
+            <Typography variant="h6" className={styles.title}>
+              {auth.user.username}
+            </Typography>
+            <ExitToApp id="logout" onClick={logOut} className={styles.icon} />
+          </div>
+        </Toolbar>
+      )}
     </AppBar>
   );
 };

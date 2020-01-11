@@ -1,11 +1,13 @@
-export type Auth = {
-  loading: boolean;
+export type User = {
+  username: string;
   token: string;
-  error: string;
+  role: string;
+  locationId: string;
+  id: string;
 };
 
 export enum UserActionTypes {
   GET_USERS = "@@users/GET_USERS",
   GET_USERS_SUCCESS = "@@users/GET_USERS_SUCCESS",
-  GET_USERS_FAIL = "@@users/GET_USERS_FAIL"
+  GET_USERS_FAIL = "@@users/GET_USERS_FAIL",
 }

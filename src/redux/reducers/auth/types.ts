@@ -3,6 +3,9 @@ export type Auth = {
   user: {
     username: string;
     token: string;
+    role: string;
+    locationId: string;
+    id: string;
   };
   error: boolean;
 };
@@ -10,20 +13,15 @@ export type Auth = {
 export enum AuthActionTypes {
   LOG_IN = '@@auth/LOG_IN',
   LOG_IN_SUCCESS = '@@auth/LOG_IN_SUCCESS',
-  LOG_IN_FAIL = '@@auth/LOG_IN_FAIL'
+  LOG_IN_FAIL = '@@auth/LOG_IN_FAIL',
+  LOG_OUT = '@@auth/LOG_OUT',
+  
+  GET_USER_INFO = "@@auth/GET_USER_INFO",
+  GET_USER_INFO_SUCCESS = "@@auth/GET_USER_INFO_SUCCESS",
+  GET_USER_INFO_FAIL = "@@auth/GET_USER_INFO_FAIL"
 }
 
-export type SuccessData = {
-  status: number;
-  statusText: string;
-  data: {
-    token: string;
-    username: string;
-    error: boolean;
-  };
-};
-
 export type AuthData = {
-  username: string;
+  login: string;
   password: string;
 };

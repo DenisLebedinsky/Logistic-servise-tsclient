@@ -2,10 +2,11 @@ import { Button, Container, TextField } from '@material-ui/core';
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
 import { loginStart } from '../../redux/reducers/auth/actions';
 import { getAuth } from '../../redux/reducers/auth/selectors';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './Authentication.module.scss';
 
 export default function Authentication() {
@@ -16,6 +17,7 @@ export default function Authentication() {
 
   const dispatch = useDispatch();
   const auth = useSelector(getAuth);
+  const { history } = useReactRouter();
 
   const changeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setlogin(e.target.value);
@@ -28,13 +30,21 @@ export default function Authentication() {
     e.preventDefault();
     setErrors(false);
     setLoading(true);
-    dispatch(loginStart({ username: login, password }));
+    dispatch(loginStart({ login, password }));
   };
 
-  useEffect(() => {
-    console.log(auth);
+  useEffect(() => {   
     if (auth.error) {
+      setLoading(false);
       setErrors(true);
+    }else{
+      if(error){
+        setErrors(false);
+      }      
+    }
+
+    if(auth.user.token){
+      history.push('/');
     }
   });
 
@@ -47,7 +57,7 @@ export default function Authentication() {
         onSubmit={sendData}
       >
         {loading ? (
-          <div>loading ...</div>
+           <CircularProgress />
         ) : (
           <>
             <TextField

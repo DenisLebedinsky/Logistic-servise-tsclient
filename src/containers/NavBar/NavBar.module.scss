@@ -1,5 +1,14 @@
 .root {
   flex-grow: 1;
+  
+}
+
+.toolbar{
+  justify-content: space-between;
+}
+
+.icon{
+  cursor: pointer;
 }
 
 .nav {
