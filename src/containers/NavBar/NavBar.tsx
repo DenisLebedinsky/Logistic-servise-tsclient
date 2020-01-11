@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useReactRouter from 'use-react-router';
 import { getAuth } from '../../redux/reducers/auth/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/reducers/auth/actions';
-import { getUserInfo } from '../../redux/reducers/users/actions';
+import { logout,getUserInfo } from '../../redux/reducers/auth/actions';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
@@ -34,6 +34,7 @@ const NavBar: React.FC = () => {
         auth.user.role === '' ||
         auth.user.id === '')
     ) {
+      debugger
       dispatch(getUserInfo(auth.user.token));
     }
   });

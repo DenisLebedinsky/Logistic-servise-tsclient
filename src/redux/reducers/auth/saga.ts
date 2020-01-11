@@ -8,7 +8,9 @@ import {
   loginStart,
   loginSuccess,
   logout,
-  getUserInfo
+  getUserInfo,
+  getUserInfoSuccess,
+  getUserInfoFail
 } from './actions';
 
 function* loginSaga(action: ReturnType<typeof loginStart>) {
@@ -45,19 +47,20 @@ function* logoutSaga(action: ReturnType<typeof logout>) {
 
 function* userInfoSaga(action: ReturnType<typeof getUserInfo>) {
   try {
-    const jwt = `Baerer ${action.payload}`;
+    
+    api.defaults.headers.common["Authorization"] = `Baerer ${action.payload.token}`;
 
-    const result: any = yield api.post('/users/getByToken', {
-      headers: { Authorization: jwt }
-    });
+    const result: any = yield api.post('/users/getByToken');
 
     if (!result) {
       throw new Error('Forbidden');
     }
 
-    yield put(loginSuccess(successData));
+    const successData:Auth = {...result.data, token: action.payload};
+
+    yield put(getUserInfoSuccess(successData));
   } catch (e) {
-    yield put(loginFail(e.message));
+    yield put(getUserInfoFail(e.message));
   }
 }
 
