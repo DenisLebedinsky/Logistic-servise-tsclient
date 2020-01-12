@@ -2,8 +2,8 @@ import { Reducer } from 'redux';
 
 import { Auth, AuthActionTypes } from './types';
 
-const localUserJSON = localStorage.getItem('user') ;
-const localToken = localUserJSON ? JSON.parse(localUserJSON).token: '';
+const localUserJSON = localStorage.getItem('user');
+const localToken = localUserJSON ? JSON.parse(localUserJSON).token : '';
 
 const initialState: Auth = {
   loading: false,
@@ -27,17 +27,17 @@ const reducer: Reducer<Auth> = (state: Auth = initialState, action) => {
       return { ...state, ...payload };
     case AuthActionTypes.LOG_IN_FAIL:
       return { ...state, error: true };
-    case AuthActionTypes.LOG_OUT:
-        const newState = {...initialState}
-        newState.user.token = '';
-       return state;
-       
+    case AuthActionTypes.LOG_OUT: {
+      const newState = { ...initialState };
+      newState.user.token = '';
+      return state;
+    }
     case AuthActionTypes.GET_USER_INFO:
       return state;
     case AuthActionTypes.GET_USER_INFO_SUCCESS:
-      return {...state, user:payload};
+      return { ...state, user: payload };
     case AuthActionTypes.GET_USER_INFO_FAIL:
-      return {...state, erroe: true};
+      return { ...state, erroe: true };
     default:
       return state;
   }

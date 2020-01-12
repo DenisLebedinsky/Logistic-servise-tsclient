@@ -1,0 +1,120 @@
+.conainer {
+}
+
+.root {
+  flex: 1;
+  height: calc(100vh - 213px);
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+table {
+  min-width: 650px;
+}
+
+.rowGrey {
+  background-color: #F2F6FC;
+}
+
+.cellNumber {
+  max-width: 30px;
+}
+
+.cellInventory {
+  min-width: 300px;
+  padding: 0;
+}
+
+.list {
+  border-bottom: 1px solid #D7DADE;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.lastList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.containerModal {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.barcodeModal {
+  align-items: flex-start;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 100px;
+  padding: 15px;
+  width: 30%;
+}
+
+.statusInProcess {
+  color: grey;
+}
+
+.StatusDelivered {
+  color: green;
+}
+
+.iconClose {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.transit {
+  display: flex;
+  justify-content: space-between;
+  min-width: 600px;
+}
+
+.transitRow {
+  border-bottom: 1px solid #D7DADE;
+  display: flex;
+  justify-content: flex-start;
+  min-width: 400px;
+}
+
+.transitLastRow {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 400px;
+}
+
+.transitBlock1 {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.transitBlock2 {
+  min-width: 100px;
+}
+
+.transitBlock3 {
+  min-width: 100px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.action {
+  margin: 10px;
+}
+
+.pagination {
+  position: absolute;
+}

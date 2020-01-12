@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useReactRouter from 'use-react-router';
 import { getAuth } from '../../redux/reducers/auth/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout,getUserInfo } from '../../redux/reducers/auth/actions';
+import { logout, getUserInfo } from '../../redux/reducers/auth/actions';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -34,7 +34,6 @@ const NavBar: React.FC = () => {
         auth.user.role === '' ||
         auth.user.id === '')
     ) {
-      debugger
       dispatch(getUserInfo(auth.user.token));
     }
   });
@@ -80,8 +79,6 @@ const NavBar: React.FC = () => {
     }
   };
 
-  console.log(auth.user.token);
-
   return (
     <AppBar position="static">
       {auth.user.token && (
@@ -90,10 +87,11 @@ const NavBar: React.FC = () => {
             <Tab label="Отправления" {...a11yProps(0)} />
 
             {auth && auth.user.role === 'admin' && (
-              <>
-                <Tab label="Пользователи" {...a11yProps(1)} />
-                <Tab label="Локации" {...a11yProps(2)} />
-              </>
+              <Tab label="Пользователи" {...a11yProps(1)} />
+            )}
+
+            {auth && auth.user.role === 'admin' && (
+              <Tab label="Локации" {...a11yProps(2)} />
             )}
           </Tabs>
 

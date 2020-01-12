@@ -15,7 +15,7 @@ export const loginFail = (error: string) =>
 export const logout = () => action(AuthActionTypes.LOG_OUT); 
 
 //get ingo about auth user
-export const getUserInfo = (token: string) => action(AuthActionTypes.GET_USER_INFO, {token});
+export const getUserInfo = (token: string) => action(AuthActionTypes.GET_USER_INFO, token);
 
 export const getUserInfoSuccess = (successData: Auth) =>
   action(AuthActionTypes.GET_USER_INFO_SUCCESS,  successData);

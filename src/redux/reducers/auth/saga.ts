@@ -2,15 +2,15 @@ import { all, fork, put, takeEvery } from 'redux-saga/effects';
 
 import api from '../../../api';
 
-import { AuthActionTypes, Auth } from './types';
+import { Auth, AuthActionTypes } from './types';
 import {
+  getUserInfo,
+  getUserInfoFail,
+  getUserInfoSuccess,
   loginFail,
   loginStart,
   loginSuccess,
-  logout,
-  getUserInfo,
-  getUserInfoSuccess,
-  getUserInfoFail
+  logout
 } from './actions';
 
 function* loginSaga(action: ReturnType<typeof loginStart>) {
@@ -42,13 +42,12 @@ function* loginSaga(action: ReturnType<typeof loginStart>) {
 }
 
 function* logoutSaga(action: ReturnType<typeof logout>) {
-  localStorage.removeItem('user');
+  yield localStorage.removeItem('user');
 }
 
 function* userInfoSaga(action: ReturnType<typeof getUserInfo>) {
   try {
-    
-    api.defaults.headers.common["Authorization"] = `Baerer ${action.payload.token}`;
+    api.defaults.headers.common.Authorization = `Baerer ${action.payload}`;
 
     const result: any = yield api.post('/users/getByToken');
 
@@ -56,7 +55,7 @@ function* userInfoSaga(action: ReturnType<typeof getUserInfo>) {
       throw new Error('Forbidden');
     }
 
-    const successData:Auth = {...result.data, token: action.payload};
+    const successData: Auth = { ...result.data, token: action.payload };
 
     yield put(getUserInfoSuccess(successData));
   } catch (e) {
@@ -64,7 +63,7 @@ function* userInfoSaga(action: ReturnType<typeof getUserInfo>) {
   }
 }
 
-//wathers
+// wathers
 function* watchLoginSaga() {
   yield takeEvery(AuthActionTypes.LOG_IN, loginSaga);
 }
@@ -77,7 +76,7 @@ function* watchUserInfoSaga() {
   yield takeEvery(AuthActionTypes.GET_USER_INFO, userInfoSaga);
 }
 
-//main
+// main
 function* authSaga() {
   yield all([
     fork(watchLoginSaga),
