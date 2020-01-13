@@ -1,11 +1,10 @@
-import { Button, Container, TextField } from '@material-ui/core';
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
-
 import { loginStart } from '../../redux/reducers/auth/actions';
 import { getAuth } from '../../redux/reducers/auth/selectors';
+
+import { Button, Container, TextField } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './Authentication.module.scss';
 
@@ -33,17 +32,15 @@ export default function Authentication() {
     dispatch(loginStart({ login, password }));
   };
 
-  useEffect(() => {   
+  useEffect(() => {
     if (auth.error) {
       setLoading(false);
       setErrors(true);
-    }else{
-      if(error){
-        setErrors(false);
-      }      
+    } else if (error) {
+      setErrors(false);
     }
 
-    if(auth.user.token){
+    if (auth.user.token) {
       history.push('/');
     }
   });
@@ -57,7 +54,7 @@ export default function Authentication() {
         onSubmit={sendData}
       >
         {loading ? (
-           <CircularProgress />
+          <CircularProgress />
         ) : (
           <>
             <TextField

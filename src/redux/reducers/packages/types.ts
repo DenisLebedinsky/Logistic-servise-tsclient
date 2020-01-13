@@ -1,25 +1,40 @@
 type Inventory = {
+  _id: string;
   title: string;
   count: number;
 };
 
+type User = {
+  name: string;
+  _id: string;
+  role: string;
+  phone: string;
+};
+
+type PopulationField = {
+  _id: string;
+  title: string;
+};
+
 type Transit = {
+  _id: string;
   date: string;
   resivedDate: string;
-  sendLocId: string;
-  sendfactLocId: string;
-  userId: string;
+  sendLocId: PopulationField;
+  sendfactLocId: PopulationField;
+  userId: User;
 };
 
 export type Package = {
+  _id: string;
   number: number;
-  sendLocationId: string;
-  sendUserId: string;
-  resiverId: string;
-  factResiverId: string;
+  sendLocationId: PopulationField;
+  sendUserId: User;
+  resiverId: PopulationField;
+  factResiverId: PopulationField;
   sendData: string;
   resiveData: string;
-  recipientId: string;
+  recipientId: User;
   inventory: Inventory[];
   transit: Transit[];
   status: string;
@@ -27,7 +42,7 @@ export type Package = {
   created: string;
 };
 
-export interface Packages {
+export interface PackageType {
   loading: boolean;
   error: boolean;
   packages: Package[];

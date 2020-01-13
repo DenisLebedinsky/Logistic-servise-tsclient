@@ -1,3 +1,3 @@
 import { AppState } from '../../store.type';
 
-export getPackages = (state: AppState) => state.packages;
+export const getPackagesFromState = (state: AppState) => state.packages;

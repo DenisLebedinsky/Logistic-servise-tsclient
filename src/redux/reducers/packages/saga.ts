@@ -7,9 +7,11 @@ import { getPackages, getPackagesFail, getPackagesSuccess } from './actions';
 
 function* getPackagesSaga(action: ReturnType<typeof getPackages>) {
   try {
-    api.defaults.headers.common.Authorization = `Baerer ${action.payload}`;
+    const { token, skip, limit } = action.payload;
 
-    const result: any = yield api.post('/packages/');
+    api.defaults.headers.common.Authorization = `Baerer ${token}`;
+
+    const result: any = yield api.post('/packages/', { skip, limit });
 
     if (result) {
       throw new Error('error with get data');

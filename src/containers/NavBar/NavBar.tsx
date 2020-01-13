@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import useReactRouter from 'use-react-router';
 import { getAuth } from '../../redux/reducers/auth/selectors';

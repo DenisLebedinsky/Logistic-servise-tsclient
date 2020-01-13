@@ -1,14 +1,17 @@
 import { Reducer } from 'redux';
 
-import { Packages, PackagesActionTypes } from './types';
+import { PackageType, PackagesActionTypes } from './types';
 
-const initialState: Packages = {
+const initialState: PackageType = {
   loading: false,
   error: false,
   packages: []
 };
 
-const reducer: Reducer<Packages> = (state: Packages = initialState, action) => {
+const reducer: Reducer<PackageType> = (
+  state: PackageType = initialState,
+  action
+) => {
   const { type, payload } = action;
 
   switch (type) {
