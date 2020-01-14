@@ -1,11 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPackagesFromState } from '../../redux/reducers/packages/selectors';
-import { getPackages } from '../../redux/reducers/packages/actions';
-import { getAuth } from '../../redux/reducers/auth/selectors';
-import { PackageType, Package } from '../../redux/reducers/packages/types';
 import moment from 'moment';
-
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,46 +9,66 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import Modal from '@material-ui/core/Modal';
-import styles from './Packages.module.scss';
 
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+
+import { Package, PackageType } from '../../redux/reducers/packages/types';
+import { getAuth } from '../../redux/reducers/auth/selectors';
+import { getPackages } from '../../redux/reducers/packages/actions';
+import { getPackagesFromState } from '../../redux/reducers/packages/selectors';
 import BarcodeModal from '../../components/Packages/BarcodeModal';
+
+import styles from './Packages.module.scss';
 
 export default function Packages() {
   const dispatch = useDispatch();
   const auth = useSelector(getAuth);
   const data: PackageType = useSelector(getPackagesFromState);
+  const getBarcode = (qr: string) => qr;
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState('');
+  const [modalData, setmodalData] = useState({
+    location: '',
+    resiveLoc: '',
+    id: '',
+    qr: ''
+  });
+  const [showModal, setshowModal] = useState(false);
+  const [showModalEdit, setShowModal] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchData = () => {
     dispatch(getPackages(auth.user.token, 0, 10));
   };
 
-  //data, getData, role, id, locations
-
-  const openModal = (e: React.MouseEvent) => {
-    //open modal
-  };
-
+  // edit modal
   const handleOpenEdit = (index: number) => {
     setCurrentIndex(index);
-    setOpenEdit(true);
+    setShowModal(true);
   };
 
-  const handleCloseEdit = () => {
+  const closeEdit = () => {
     fetchData();
-    setOpenEdit(false);
+    setShowModal(false);
   };
 
-  const handleOpen = async (packageItem: Package) => {
-    // const qr = await getBarcode(item._id);
-    // const data = {
-    //   location: item.sendLocationId && item.sendLocationId.title,
-    //   resiveLoc: item.resiverId && item.resiverId.title
-    // };
-    // setOpen({ state: true, qr: qr, id: item._id, data });
+  // modal
+  const handleOpenModal = async (packageItem: Package) => {
+    const qr = await getBarcode(packageItem._id);
+
+    setmodalData({
+      qr,
+      id: packageItem._id,
+      location: packageItem.sendLocationId && packageItem.sendLocationId.title,
+      resiveLoc: packageItem.resiverId && packageItem.resiverId.title
+    });
   };
+
+  const closeModal = (e: React.MouseEvent) => {
+    setshowModal(false);
+  };
+
+  //---------
 
   const converStatus = (status: string) => {
     if (status === 'inProcess') {
@@ -93,7 +106,7 @@ export default function Packages() {
 
   return (
     <div className={styles.container}>
-      <Button variant="contained" color="primary" onClick={openModal}>
+      <Button variant="contained" color="primary" onClick={handleOpenModal}>
         Создать отправление
       </Button>
       <Paper className={styles.root}>
@@ -238,7 +251,7 @@ export default function Packages() {
                     ) : null}
                     <FileIcon
                       className={styles.action}
-                      onClick={() => handleOpen(packageItem)}
+                      onClick={() => handleOpenModal(packageItem)}
                     />
                   </div>
                 </TableCell>
@@ -250,22 +263,22 @@ export default function Packages() {
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={open.state}
-          onClose={handleClose}
+          open={showModal}
+          onClose={closeModal}
         >
-          <BarcodeModal open={} handleClose={handleClose}></BarcodeModal>
+          <BarcodeModal data={modalData} handleClose={closeModal} />
         </Modal>
 
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={openEdit}
-          onClose={handleCloseEdit}
+          open={showModalEdit}
+          onClose={closeEdit}
         >
           <div id="modal-form">
             <ModalFormEdit
-              create={true}
-              closeModal={handleCloseEdit}
+              create
+              closeModal={closeEdit}
               data={data[currentIndex]}
               deletePackage={_deletePackage}
             />

@@ -1,15 +1,23 @@
 import React from 'react';
-import styles from './BarcodeModal';
+import styles from './BarcodeModal.module.scss';
 import Barcode from '../../../containers/Barcode';
+import CloseIcon from '@material-ui/icons/Close';
 
-export default function BarcodeModal({ any: handleClose, any: open }) {
+type barcodeModal = {
+  qr: string;
+  id: string;
+  location: string;
+  resiveLoc: string;
+};
+
+export default function BarcodeModal({ handleClose, data }) {
   return (
     <div id="modal-qr" className={styles.containerModal}>
       <div className={styles.barcodeModal}>
         <div className={styles.iconClose}>
           <CloseIcon onClick={handleClose} />
         </div>
-        <Barcode qr={open.qr} data={open.data} />
+        <Barcode data={data} />
       </div>
     </div>
   );

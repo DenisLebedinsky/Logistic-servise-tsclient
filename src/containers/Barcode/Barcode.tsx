@@ -3,7 +3,7 @@ import ReactToPrint from 'react-to-print';
 import { Button } from '@material-ui/core';
 import styles from './Barcode.module.scss';
 
-const Barcode = ({ qr, data }) => {
+const Barcode = ({ data }) => {
   const componentRef = useRef();
   const [qrCount, setqrCount] = useState({ n: 1, arr: [1] });
 
@@ -22,7 +22,7 @@ const Barcode = ({ qr, data }) => {
     <div className={styles.qrBlock}>
       <img
         id="myimg"
-        src={qr}
+        src={data.qr}
         className={styles.qrElement}
         alt="error try restar page"
       />
@@ -43,7 +43,7 @@ const Barcode = ({ qr, data }) => {
       <div id="printQR" className={styles.qrNoPrint} ref={componentRef}>
         {qrCount.arr.map((el, i) => (
           <div key={`qr_${i}`} className={styles.infoBlock}>
-            <img src={qr} alt="error restart page" className={styles.QRimage} />
+            <img src={data.qr} alt="error restart page" className={styles.QRimage} />
             <div className={styles.info}>
               <span className={styles.infoBold}>Отправитель:</span>
               <span>{data.location}</span>
