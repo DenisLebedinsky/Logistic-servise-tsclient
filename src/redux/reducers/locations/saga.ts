@@ -2,7 +2,8 @@ import { all, fork, put, takeEvery } from 'redux-saga/effects';
 
 import api from '../../../api';
 
-import { PackagesActionTypes } from './types';
+import { LocationsActionTypes } from './types';
+
 import {
   addLocation,
   addLocationFail,
@@ -18,43 +19,60 @@ import {
   updateLocationSuccess
 } from './actions';
 
-function* getLocationsSaga(action: ReturnType<typeof getPackages>) {
+function* getLocationsSaga(action: ReturnType<typeof getLocations>) {
   try {
     const { token, skip, limit } = action.payload;
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/packages/', { skip, limit });
+    const result: any = yield api.post('/locations/', { skip, limit });
 
     if (result) {
       throw new Error('error with get data');
     }
 
-    yield put(getPackagesSuccess(result.data));
+    yield put(getLocationsSuccess(result.data));
   } catch (error) {
-    yield put(getPackagesFail(error));
+    yield put(getLocationsFail(error));
   }
 }
 
-function* addPackageSaga(action: ReturnType<typeof addPackage>) {
+function* addLocationSaga(action: ReturnType<typeof addLocation>) {
   try {
-    const { token, newPackage } = action.payload;
+    const { token, newLocation } = action.payload;
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/package/create', newPackage);
+    const result: any = yield api.post('/location/create', newLocation);
 
     if (result) {
       throw new Error('error with get update');
     }
 
-    yield put(addPackageSuccess(result.data));
+    yield put(addLocationSuccess(result.data));
   } catch (error) {
-    yield put(addPackageFail(error));
+    yield put(addLocationFail(error));
   }
 }
 
-function* updatePackageSaga(action: ReturnType<typeof updatePackage>) {
+function* updateLocationSaga(action: ReturnType<typeof updateLocation>) {
+  try {
+    const { token, editedLocation } = action.payload;
+    api.defaults.headers.common.Authorization = `Baerer ${token}`;
+
+    const result: any = yield api.post('/package/update/', editedLocation);
+
+    if (result) {
+      throw new Error('error with get data');
+    }
+
+    yield put(updateLocationSuccess(result.data));
+  } catch (error) {
+    yield put(updateLocationFail(error));
+  }
+}
+
+function* deleteLocationSaga(action: ReturnType<typeof deleteLocation>) {
   try {
     const { token, id } = action.payload;
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
@@ -65,53 +83,36 @@ function* updatePackageSaga(action: ReturnType<typeof updatePackage>) {
       throw new Error('error with get data');
     }
 
-    yield put(deletePackageSuccess(result.data));
+    yield put(deleteLocationSuccess(result.data));
   } catch (error) {
-    yield put(deletePackageFail(error));
-  }
-}
-
-function* deletePackagesSaga(action: ReturnType<typeof deletePackage>) {
-  try {
-    const { token, editedPackage } = action.payload;
-    api.defaults.headers.common.Authorization = `Baerer ${token}`;
-
-    const result: any = yield api.post('/package/update/', editedPackage);
-
-    if (result) {
-      throw new Error('error with get data');
-    }
-
-    yield put(updatePackageSuccess(result.data));
-  } catch (error) {
-    yield put(updatePackageFail(error));
+    yield put(deleteLocationFail(error));
   }
 }
 
 // watchers
-function* watchGetPackageSaga() {
-  yield takeEvery(PackagesActionTypes.GET_PACKAGES, getPackagesSaga);
+function* watchGetLocationsSaga() {
+  yield takeEvery(LocationsActionTypes.GET_LOCATIONS, getLocationsSaga);
 }
 
-function* watchAddPackageSaga() {
-  yield takeEvery(PackagesActionTypes.ADD_PACKAGE, addPackageSaga);
+function* watchAddLocationSaga() {
+  yield takeEvery(LocationsActionTypes.ADD_LOCATION, addLocationSaga);
 }
 
-function* watchUpdatePackageSaga() {
-  yield takeEvery(PackagesActionTypes.UPDATE_PACKAGE, updatePackageSaga);
+function* watchUpdateLocationSaga() {
+  yield takeEvery(LocationsActionTypes.UPDATE_LOCATION, updateLocationSaga);
 }
 
-function* watchDeletePackageSaga() {
-  yield takeEvery(PackagesActionTypes.UPDATE_PACKAGE, deletePackagesSaga);
+function* watchDeleteLocationSaga() {
+  yield takeEvery(LocationsActionTypes.DELETE_LOCATION, deleteLocationSaga);
 }
 // main
-function* packagesSaga() {
+function* locationsSaga() {
   yield all([
-    fork(watchGetPackageSaga),
-    fork(watchAddPackageSaga),
-    fork(watchUpdatePackageSaga),
-    fork(watchDeletePackageSaga)
+    fork(watchGetLocationsSaga),
+    fork(watchAddLocationSaga),
+    fork(watchUpdateLocationSaga),
+    fork(watchDeleteLocationSaga)
   ]);
 }
 
-export default packagesSaga;
+export default locationsSaga;
