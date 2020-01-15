@@ -60,7 +60,7 @@
         "ignoreMemberSort": false
       }
     ],
-    "import/group-exports": ["error"],
+    "import/group-exports": "off",
     "import/order": [
       "error",
       {
