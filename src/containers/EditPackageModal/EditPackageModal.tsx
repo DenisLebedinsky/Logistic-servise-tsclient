@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './EditPackagesModal.module.scss';
+import styles from './EditPackageModal.module.scss';
 import { TextField, Button } from '@material-ui/core';
 
 import { getLocations } from 'redux/reducers/locations/actions';
@@ -12,11 +12,16 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddCircle from '@material-ui/icons/AddCircle';
-import AutoSelectLocation from 'components/Locations/Locations/AutoSelectLocation';
+import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
+import { EditPackageModalFC } from './types';
 
-const ModalFormEdit = ({ data, closeModal, deletePackage }) => {
+const ModalFormEdit: React.FC<EditPackageModalFC> = ({
+  data,
+  closeModal,
+  deletePackage
+}) => {
   let dataItems = data.inventory
     ? data.inventory.map(el => ({ title: el.title, count: el.count }))
     : [];
@@ -54,7 +59,7 @@ const ModalFormEdit = ({ data, closeModal, deletePackage }) => {
     dispatch(getLocations);
   };
 
-  const sendData = async e => {
+  const sendData = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     //if (stateInput.single) {
@@ -75,7 +80,7 @@ const ModalFormEdit = ({ data, closeModal, deletePackage }) => {
 
     dispatch(updatePackage(user.token, data));
     // if (res !== 'error') {
-    //   setReadOnly({ status: true, qr: res.qr });
+    setReadOnly({ status: true, qr: res.qr });
     // }
   };
 

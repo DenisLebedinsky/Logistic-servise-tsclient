@@ -2,15 +2,13 @@ import React from 'react';
 import styles from './BarcodeModal.module.scss';
 import Barcode from 'containers/Barcode';
 import CloseIcon from '@material-ui/icons/Close';
+import { BarcodeModalFC } from './types';
 
-type barcodeModal = {
-  qr: string;
-  id: string;
-  location: string;
-  resiveLoc: string;
-};
+const BarcodeModal: React.FC<BarcodeModalFC> = ({ data, closeModal }) => {
+  function handleClose(e: React.MouseEvent) {
+    closeModal();
+  }
 
-export default function BarcodeModal({ handleClose, data }) {
   return (
     <div id="modal-qr" className={styles.containerModal}>
       <div className={styles.barcodeModal}>
@@ -21,4 +19,6 @@ export default function BarcodeModal({ handleClose, data }) {
       </div>
     </div>
   );
-}
+};
+
+export default BarcodeModal;

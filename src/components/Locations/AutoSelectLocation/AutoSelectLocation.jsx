@@ -8,43 +8,41 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     height: 150,
-    flexGrow: 1,
+    flexGrow: 1
   },
   container: {
-    position: 'relative',
+    position: 'relative'
   },
   suggestionsContainerOpen: {
     position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing(1),
     left: 0,
-    right: 0,
+    right: 0
   },
   suggestion: {
-    display: 'block',
+    display: 'block'
   },
   suggestionsList: {
     margin: 0,
     padding: 0,
-    listStyleType: 'none',
+    listStyleType: 'none'
   },
   divider: {
-    height: theme.spacing(2),
-  },
+    height: theme.spacing(2)
+  }
 }));
 
-export default function AutoSelectLocation({ suggestions, stateInput, setStateInput }) {
+const AutoSelectLocation = ({ suggestions, stateInput, setStateInput }) => {
   const classes = useStyles();
- 
 
   const [stateSuggestions, setSuggestions] = React.useState([]);
 
   function renderInputComponent(inputProps) {
-    const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
     return (
       <TextField
@@ -55,15 +53,15 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
             inputRef(node);
           },
           classes: {
-            input: classes.input,
-          },
+            input: classes.input
+          }
         }}
         {...other}
       />
     );
   }
 
-  function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const renderSuggestion = (suggestion, { query, isHighlighted }) => {
     const matches = match(suggestion.label, query);
     const parts = parse(suggestion.label, matches);
 
@@ -71,14 +69,17 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
       <MenuItem selected={isHighlighted} component="div">
         <div>
           {parts.map(part => (
-            <span key={part.text} style={{ fontWeight: part.highlight ? 500 : 400 }}>
+            <span
+              key={part.text}
+              style={{ fontWeight: part.highlight ? 500 : 400 }}
+            >
               {part.text}
             </span>
           ))}
         </div>
       </MenuItem>
     );
-  }
+  };
 
   function getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
@@ -88,15 +89,16 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
     return inputLength === 0
       ? []
       : suggestions.filter(suggestion => {
-        const keep =
-          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+          const keep =
+            count < 5 &&
+            suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
 
-        if (keep) {
-          count += 1;
-        }
+          if (keep) {
+            count += 1;
+          }
 
-        return keep;
-      });
+          return keep;
+        });
   }
 
   function getSuggestionValue(suggestion) {
@@ -114,7 +116,7 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
   const handleChange = name => (event, { newValue }) => {
     setStateInput({
       ...stateInput,
-      [name]: newValue,
+      [name]: newValue
     });
   };
 
@@ -124,7 +126,7 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
     onSuggestionsFetchRequested: handleSuggestionsFetchRequested,
     onSuggestionsClearRequested: handleSuggestionsClearRequested,
     getSuggestionValue,
-    renderSuggestion,
+    renderSuggestion
   };
 
   return (
@@ -137,13 +139,13 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
           label: 'Адрес получателя',
           placeholder: 'Введите адрес',
           value: stateInput.single,
-          onChange: handleChange('single'),
+          onChange: handleChange('single')
         }}
         theme={{
           container: classes.container,
           suggestionsContainerOpen: classes.suggestionsContainerOpen,
           suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion,
+          suggestion: classes.suggestion
         }}
         renderSuggestionsContainer={options => (
           <Paper {...options.containerProps} square>
@@ -160,13 +162,13 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
           label: 'Первый транзитный пункт',
           placeholder: 'Введите адрес',
           value: stateInput.popper,
-          onChange: handleChange('popper'),
+          onChange: handleChange('popper')
         }}
         theme={{
           container: classes.container,
           suggestionsContainerOpen: classes.suggestionsContainerOpen,
           suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion,
+          suggestion: classes.suggestion
         }}
         renderSuggestionsContainer={options => (
           <Paper {...options.containerProps} square>
@@ -176,4 +178,6 @@ export default function AutoSelectLocation({ suggestions, stateInput, setStateIn
       />
     </div>
   );
-}
+};
+
+export default AutoSelectLocation;

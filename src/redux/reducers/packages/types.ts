@@ -28,10 +28,10 @@ type Transit = {
 export type Package = {
   _id: string;
   number: number;
-  sendLocationId: PopulationField;
+  sendLocationId: PopulationField | string;
   sendUserId: User;
-  resiverId: PopulationField;
-  factResiverId: PopulationField;
+  resiverId: PopulationField | string;
+  factResiverId: PopulationField | string;
   sendData: string;
   resiveData: string;
   recipientId: User;

@@ -71,7 +71,7 @@ export default function Packages() {
     });
   };
 
-  const closeModal = (e: React.MouseEvent) => {
+  const closeModal = () => {
     setshowModal(false);
   };
 
@@ -271,7 +271,7 @@ export default function Packages() {
           open={showModal}
           onClose={closeModal}
         >
-          <BarcodeModal data={modalData} handleClose={closeModal} />
+          <BarcodeModal data={modalData} closeModal={closeModal} />
         </Modal>
 
         <Modal
@@ -282,8 +282,8 @@ export default function Packages() {
         >
           <div id="modal-form">
             <ModalFormEdit
-              closeModal={closeEdit}
               data={data.packages[currentIndex]}
+              closeModal={closeEdit}
               deletePackage={deletePackage}
             />
           </div>
