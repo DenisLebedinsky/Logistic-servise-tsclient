@@ -1,3 +1,3 @@
-import { AppState } from '../../store.type';
+import { AppState } from 'redux/store.type';
 
-export const getLocationsFromState = (state: AppState) => state.Locations;
+export const getLocationsFromState = (state: AppState) => state.locations;

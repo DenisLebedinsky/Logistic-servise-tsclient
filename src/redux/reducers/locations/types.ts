@@ -7,7 +7,7 @@ export type Location = {
 export interface Locations {
   loading: boolean;
   error: boolean;
-  Locations: Location[];
+  locations: Location[];
 }
 
 export enum LocationsActionTypes {

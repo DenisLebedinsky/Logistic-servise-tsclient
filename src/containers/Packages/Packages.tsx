@@ -13,11 +13,12 @@ import Modal from '@material-ui/core/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 
-import { Package, PackageType } from '../../redux/reducers/packages/types';
-import { getAuth } from '../../redux/reducers/auth/selectors';
-import { getPackages } from '../../redux/reducers/packages/actions';
-import { getPackagesFromState } from '../../redux/reducers/packages/selectors';
-import BarcodeModal from '../../components/Packages/BarcodeModal';
+import { Package, PackageType } from 'redux/reducers/packages/types';
+import { getAuth } from 'redux/reducers/auth/selectors';
+import { getPackages } from 'redux/reducers/packages/actions';
+import { getPackagesFromState } from 'redux/reducers/packages/selectors';
+import BarcodeModal from 'components/Packages/BarcodeModal';
+import ModalFormEdit from '../EditPackageModal';
 
 import styles from './Packages.module.scss';
 
@@ -39,6 +40,12 @@ export default function Packages() {
 
   const fetchData = () => {
     dispatch(getPackages(auth.user.token, 0, 10));
+  };
+
+  const deletePackage = async id => {
+    await deletePackage(id);
+    setOpenEdit(false);
+    getData();
   };
 
   // edit modal
@@ -241,9 +248,7 @@ export default function Packages() {
 
                 <TableCell align="center">
                   <div className={styles.actions}>
-                    {(id === packageItem.sendUserId &&
-                      packageItem.status === 'notSent') ||
-                    role === 'admin' ? (
+                    {packageItem.status === 'notSent' ? (
                       <EditIcon
                         className={styles.action}
                         onClick={() => handleOpenEdit(indexRow)}
@@ -277,10 +282,9 @@ export default function Packages() {
         >
           <div id="modal-form">
             <ModalFormEdit
-              create
               closeModal={closeEdit}
-              data={data[currentIndex]}
-              deletePackage={_deletePackage}
+              data={data.packages[currentIndex]}
+              deletePackage={deletePackage}
             />
           </div>
         </Modal>

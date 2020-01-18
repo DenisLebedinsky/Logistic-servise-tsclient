@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
-import { loginStart } from '../../redux/reducers/auth/actions';
-import { getAuth } from '../../redux/reducers/auth/selectors';
+import { loginStart } from 'redux/reducers/auth/actions';
+import { getAuth } from 'redux/reducers/auth/selectors';
 
 import { Button, Container, TextField } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';

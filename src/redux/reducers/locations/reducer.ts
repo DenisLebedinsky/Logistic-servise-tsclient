@@ -1,25 +1,25 @@
 import { Reducer } from 'redux';
 
-import { PackageType, PackagesActionTypes } from './types';
+import { Locations, LocationsActionTypes,Location } from './types';
 
-const initialState: PackageType = {
+const initialState: Locations = {
   loading: false,
   error: false,
-  packages: []
+  locations: []
 };
 
-const reducer: Reducer<PackageType> = (
-  state: PackageType = initialState,
+const reducer: Reducer<Locations> = (
+  state: Locations = initialState,
   action
 ) => {
   const { type, payload } = action;
 
   switch (type) {
-    case PackagesActionTypes.GET_PACKAGES:
+    case LocationsActionTypes.GET_LOCATIONS:
       return { ...state, error: true, loading: true };
-    case PackagesActionTypes.GET_PACKAGES_SUCCESS:
-      return { loading: false, error: false, packages: payload };
-    case PackagesActionTypes.GET_PACKAGES_FAIL:
+    case LocationsActionTypes.GET_LOCATIONS_SUCCESS:
+      return { loading: false, error: false, locations: payload };
+    case LocationsActionTypes.GET_LOCATIONS_FAIL:
       return { ...state, error: true };
 
     default:

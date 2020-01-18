@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
 
-import api from '../../../api';
+import api from 'api';
 
 import { Auth, AuthActionTypes } from './types';
 import {

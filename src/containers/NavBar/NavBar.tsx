@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import useReactRouter from 'use-react-router';
-import { getAuth } from '../../redux/reducers/auth/selectors';
+import { getAuth } from 'redux/reducers/auth/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, getUserInfo } from '../../redux/reducers/auth/actions';
+import { logout, getUserInfo } from 'redux/reducers/auth/actions';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';

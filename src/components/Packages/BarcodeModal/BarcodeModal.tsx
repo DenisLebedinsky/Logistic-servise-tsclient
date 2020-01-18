@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './BarcodeModal.module.scss';
-import Barcode from '../../../containers/Barcode';
+import Barcode from 'containers/Barcode';
 import CloseIcon from '@material-ui/icons/Close';
 
 type barcodeModal = {
