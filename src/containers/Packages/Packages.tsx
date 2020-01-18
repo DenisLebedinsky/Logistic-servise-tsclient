@@ -34,18 +34,18 @@ export default function Packages() {
     id: '',
     qr: ''
   });
-  const [showModal, setshowModal] = useState(false);
-  const [showModalEdit, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowEditModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchData = () => {
     dispatch(getPackages(auth.user.token, 0, 10));
   };
 
-  const deletePackage = async id => {
+  const deletePackage = async (id: string) => {
     await deletePackage(id);
-    setOpenEdit(false);
-    getData();
+    setShowEditModal(false);
+    fetchData();
   };
 
   // edit modal
@@ -72,7 +72,7 @@ export default function Packages() {
   };
 
   const closeModal = () => {
-    setshowModal(false);
+    setShowModal(false);
   };
 
   //---------
@@ -113,9 +113,7 @@ export default function Packages() {
 
   return (
     <div className={styles.container}>
-      <Button variant="contained" color="primary" onClick={handleOpenModal}>
-        Создать отправление
-      </Button>
+      <Button onClick={handleOpenModal}>Создать отправление</Button>
       <Paper className={styles.root}>
         <Table
           className={styles.table}

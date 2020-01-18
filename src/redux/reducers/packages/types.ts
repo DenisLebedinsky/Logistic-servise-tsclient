@@ -1,7 +1,7 @@
 type Inventory = {
-  _id: string;
   title: string;
   count: number;
+  _id?: string;
 };
 
 type User = {
@@ -12,8 +12,8 @@ type User = {
 };
 
 type PopulationField = {
-  _id: string;
   title: string;
+  _id?: string;
 };
 
 type Transit = {
@@ -28,6 +28,32 @@ type Transit = {
 export type Package = {
   _id: string;
   number: number;
+  sendLocationId: PopulationField;
+  sendUserId: User;
+  resiverId: PopulationField;
+  factResiverId: PopulationField;
+  sendData: string;
+  resiveData: string;
+  recipientId: User;
+  inventory: Inventory[];
+  transit: Transit[];
+  status: string;
+  comment: string;
+  created: string;
+};
+
+type TransitEditable = {
+  sendLocId: PopulationField | string;
+  userId?: User;
+  _id?: string;
+  date?: string;
+  resivedDate?: string;
+  sendfactLocId?: PopulationField | string;
+};
+
+export type PackageEditable = {
+  _id: string;
+  number: number;
   sendLocationId: PopulationField | string;
   sendUserId: User;
   resiverId: PopulationField | string;
@@ -36,7 +62,7 @@ export type Package = {
   resiveData: string;
   recipientId: User;
   inventory: Inventory[];
-  transit: Transit[];
+  transit: TransitEditable[];
   status: string;
   comment: string;
   created: string;

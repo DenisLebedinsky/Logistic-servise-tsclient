@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './EditPackageModal.module.scss';
 import { TextField, Button } from '@material-ui/core';
@@ -16,17 +16,23 @@ import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
 import { EditPackageModalFC } from './types';
+import { PackageEditable } from 'redux/reducers/packages/types';
 
 const ModalFormEdit: React.FC<EditPackageModalFC> = ({
   data,
   closeModal,
   deletePackage
 }) => {
+  const editData: PackageEditable = { ...data };
+
   let dataItems = data.inventory
     ? data.inventory.map(el => ({ title: el.title, count: el.count }))
     : [];
 
-  const resiver = data.resiverId ? data.resiverId.title : '';
+  let resiver = '';
+  if (data.resiverId.hasOwnProperty('title')) {
+    resiver = data.resiverId['title'];
+  }
 
   let transit = '';
 
@@ -59,37 +65,45 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     dispatch(getLocations);
   };
 
-  const sendData = async (e: SyntheticEvent) => {
+  const sendData = () => async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     //if (stateInput.single) {
 
-    data.resiverId = stateInput.single;
+    editData.resiverId = stateInput.single;
 
-    if (data.transit && data.transit.length > 0) {
-      data.transit[0].sendLocId =
-        stateInput.popper !== '' ? { title: stateInput.popper } : undefined;
+    if (data.transit && data.transit.length > 0 && editData.transit[0]) {
+      if (stateInput.popper !== '') {
+        editData.transit[0].sendLocId = { title: stateInput.popper };
+      }
+      editData.transit[0].sendLocId =
+        stateInput.popper !== '' ? { title: stateInput.popper } : '';
+    } else if (stateInput.popper !== '') {
+      editData.transit = [
+        {
+          sendLocId: {
+            title: stateInput.popper
+          }
+        }
+      ];
     } else {
-      data.transit =
-        stateInput.popper !== ''
-          ? [{ sendLocId: { title: stateInput.popper } }]
-          : [];
+      editData.transit = [];
     }
 
-    data.inventory = items;
+    editData.inventory = items;
 
-    dispatch(updatePackage(user.token, data));
+    dispatch(updatePackage(user.token, editData));
     // if (res !== 'error') {
-    setReadOnly({ status: true, qr: res.qr });
+    setReadOnly({ status: true, qr: '13123' });
     // }
   };
 
-  const changeTitle = e => {
-    setTitle(e.target.value);
+  const changeTitle = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
   };
 
-  const changeCount = e => {
-    setCount(parseInt(e.target.value));
+  const changeCount = () => (evant: React.ChangeEvent<HTMLInputElement>) => {
+    setCount(parseInt(evant.target.value));
   };
 
   const addItem = () => {
@@ -97,14 +111,18 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
       const newItems = items.concat({ title, count });
 
       setItems(newItems);
-      setCount('');
+      setCount(1);
       setTitle('');
     }
   };
 
-  const delItem = index => {
+  const delItem = (index: number) => {
     const newItems = items.filter((el, i) => i !== index);
     setItems(newItems);
+  };
+
+  const handleClose = () => {
+    closeModal();
   };
 
   const suggestions = locationsState.locations.map(loc => ({
@@ -117,12 +135,12 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
       className={styles.container}
       noValidate
       autoComplete="off"
-      onSubmit={e => sendData(e)}
+      onSubmit={sendData}
     >
       <div className={styles.formContainer}>
         <div className={styles.closeIcon}>
           <h2>Опись отправления (редактирование)</h2>
-          <CloseIcon onClick={closeModal} />
+          <CloseIcon onClick={handleClose} />
         </div>
 
         {readOnly.status ? (
@@ -149,7 +167,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
                 label="Номенклатура"
                 className={styles.textFieldTitle}
                 value={title}
-                onChange={e => changeTitle(e)}
+                onChange={changeTitle}
                 variant="outlined"
               />
               <TextField
@@ -158,7 +176,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
                 type="number"
                 className={styles.textFieldCount}
                 value={count}
-                onChange={e => changeCount(e)}
+                onChange={changeCount}
                 variant="outlined"
               />
               <AddCircle

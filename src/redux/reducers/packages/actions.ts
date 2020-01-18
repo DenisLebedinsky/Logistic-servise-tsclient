@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { Package, PackagesActionTypes } from './types';
+import { Package, PackagesActionTypes, PackageEditable } from './types';
 
 // get
 export const getPackages = (token: string, skip: number, limit: number) =>
@@ -23,7 +23,7 @@ export const addPackageFail = (error: string) =>
   action(PackagesActionTypes.ADD_PACKAGE_FAIL, error);
 
 // update
-export const updatePackage = (token: string, editedPackage: Package) =>
+export const updatePackage = (token: string, editedPackage: PackageEditable) =>
   action(PackagesActionTypes.UPDATE_PACKAGE, { token, editedPackage });
 
 export const updatePackageSuccess = (updatedPackage: Package) =>
