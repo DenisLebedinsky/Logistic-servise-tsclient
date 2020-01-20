@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
+
 import useReactRouter from 'use-react-router';
 import { getAuth } from 'redux/reducers/auth/selectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +26,7 @@ const NavBar: React.FC = () => {
     if (!auth.user.token && location.pathname !== '/login') {
       history.push('/login');
     }
-  });
+  }, [location.pathname]);
 
   useEffect(() => {
     if (
@@ -37,7 +38,7 @@ const NavBar: React.FC = () => {
     ) {
       dispatch(getUserInfo(auth.user.token));
     }
-  });
+  }, [auth.user.token]);
 
   useEffect(() => {
     if (location.pathname === '/' && path !== 0) {
@@ -51,7 +52,7 @@ const NavBar: React.FC = () => {
     if (location.pathname === '/locations' && path !== 2) {
       setPath(2);
     }
-  });
+  }, [location.pathname, path]);
 
   const logOut = () => {
     dispatch(logout());

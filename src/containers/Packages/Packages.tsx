@@ -18,6 +18,7 @@ import { getPackages } from 'redux/reducers/packages/actions';
 import { getPackagesFromState } from 'redux/reducers/packages/selectors';
 import BarcodeModal from 'components/Packages/BarcodeModal';
 import Error from 'components/Error';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import ModalFormEdit from '../EditPackageModal';
 
@@ -39,15 +40,17 @@ export default function Packages() {
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowEditModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const fetchData = () => {
-    dispatch(getPackages(auth.user.token, 0, 10));
+  const fetchData = (skip: number, limit: number) => {
+    dispatch(getPackages(auth.user.token, skip, limit));
   };
 
   const deletePackage = async (id: string) => {
     await deletePackage(id);
     setShowEditModal(false);
-    fetchData();
+    fetchData(0, rowsPerPage);
   };
 
   // edit modal
@@ -57,7 +60,7 @@ export default function Packages() {
   };
 
   const closeEdit = () => {
-    fetchData();
+    fetchData(0, rowsPerPage);
     setShowModal(false);
   };
 
@@ -107,9 +110,23 @@ export default function Packages() {
     return '';
   };
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+    fetchData(newPage * rowsPerPage, rowsPerPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const rows = parseInt(event.target.value, 10);
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+    fetchData(page * rows, rows);
+  };
+
   useEffect(() => {
     if (!data.packages.length && !data.error) {
-      fetchData();
+      fetchData(0, rowsPerPage);
     }
   }, [data.packages]);
 
@@ -122,7 +139,9 @@ export default function Packages() {
         </div>
       ) : (
         <>
-          <Button>Создать отправление</Button>
+          <Button variant="contained" color="primary">
+            Создать отправление
+          </Button>
 
           <Paper className={styles.root}>
             <Table
@@ -262,12 +281,12 @@ export default function Packages() {
 
                     <TableCell align="center">
                       <div className={styles.actions}>
-                        {packageItem.status === 'notSent' ? (
+                        {packageItem.status === 'notSent' && (
                           <EditIcon
                             className={styles.action}
                             onClick={() => handleOpenEdit(indexRow)}
                           />
-                        ) : null}
+                        )}
                         <FileIcon
                           className={styles.action}
                           onClick={() => handleOpenModalBarcode(packageItem)}
@@ -320,6 +339,20 @@ export default function Packages() {
             {/*  </div> */}
             {/* </Modal> */}
           </Paper>
+
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={data.count}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            labelRowsPerPage="записей на странице"
+            labelDisplayedRows={({ from, to, count }) =>
+              `${from}-${to === -1 ? count : to} из ${count}`
+            }
+          />
         </>
       )}
     </div>

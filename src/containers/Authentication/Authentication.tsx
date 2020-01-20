@@ -43,7 +43,7 @@ export default function Authentication() {
     if (auth.user.token) {
       history.push('/');
     }
-  });
+  }, [auth.error, auth.user.token, error, history]);
 
   return (
     <Container maxWidth="sm">
