@@ -24,13 +24,13 @@ function* getPackagesSaga(action: ReturnType<typeof getPackages>) {
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/packages/', { skip, limit });
+    const result: any = yield api.post('/package/', { skip, limit });
 
-    if (result) {
+    if (!result.data) {
       throw new Error('error with get data');
     }
-
     yield put(getPackagesSuccess(result.data));
+
   } catch (error) {
     yield put(getPackagesFail(error));
   }

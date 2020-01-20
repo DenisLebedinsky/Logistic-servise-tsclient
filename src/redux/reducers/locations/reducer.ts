@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { Locations, LocationsActionTypes,Location } from './types';
+import { Locations, LocationsActionTypes } from './types';
 
 const initialState: Locations = {
   loading: false,

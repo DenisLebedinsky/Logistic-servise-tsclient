@@ -96,7 +96,7 @@ const NavBar: React.FC = () => {
             )}
           </Tabs>
 
-          <div>
+          <div className={styles.user}>
             <Typography variant="h6" className={styles.title}>
               {auth.user.username}
             </Typography>

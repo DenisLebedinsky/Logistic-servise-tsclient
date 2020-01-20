@@ -55,15 +55,15 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     popper: transit
   });
 
+  const getLoc = async () => {
+    dispatch(getLocations);
+  };
+
   useEffect(() => {
     if (locationsState.locations.length === 0) {
       getLoc();
     }
   });
-
-  const getLoc = async () => {
-    dispatch(getLocations);
-  };
 
   const sendData = () => async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

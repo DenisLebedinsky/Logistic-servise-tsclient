@@ -72,6 +72,7 @@ export interface PackageType {
   loading: boolean;
   error: boolean;
   packages: Package[];
+  count: number;
 }
 
 export enum PackagesActionTypes {

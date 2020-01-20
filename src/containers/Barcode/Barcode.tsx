@@ -1,14 +1,17 @@
-import React, { useState, useRef } from 'react';
-import ReactToPrint from 'react-to-print';
+// import ReactToPrint from 'react-to-print';
 import { Button } from '@material-ui/core';
-import styles from './Barcode.module.scss';
 
-const Barcode = ({ data }) => {
-  const componentRef = useRef();
+import React, { useState } from 'react';
+
+import styles from './Barcode.module.scss';
+import { BarcodeFC } from './types';
+
+const Barcode: React.FC<BarcodeFC> = ({ data }) => {
+  //  const componentRef = useRef(null);
   const [qrCount, setqrCount] = useState({ n: 1, arr: [1] });
 
-  const printImgCount = e => {
-    const value = e.target.value;
+  const printImgCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
     const newArr = [];
 
     for (let i = 0; i < value; i++) {
@@ -17,6 +20,10 @@ const Barcode = ({ data }) => {
 
     setqrCount({ n: value, arr: newArr });
   };
+
+  const print = () =>()=> {
+    window.print();
+  }
 
   return (
     <div className={styles.qrBlock}>
@@ -32,16 +39,21 @@ const Barcode = ({ data }) => {
         value={qrCount.n}
         onChange={e => printImgCount(e)}
       />
-      <ReactToPrint
-        trigger={() => (
-          <Button variant="contained" className={styles.qrElement}>
-            Печать
-          </Button>
-        )}
-        content={() => componentRef.current}
-      />
-      <div id="printQR" className={styles.qrNoPrint} ref={componentRef}>
+      {/* <ReactToPrint */}
+      {/*  trigger={() => ( */}
+      <Button variant="contained" className={styles.qrElement} onClick={print}>
+        Печать
+      </Button>
+      {/*  )} */}
+      {/*  content={() => componentRef.current} */}
+      {/* /> */}
+      <div
+        id="printQR"
+        className={styles.qrNoPrint}
+        //     ref={componentRef}
+      >
         {qrCount.arr.map((el, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <div key={`qr_${i}`} className={styles.infoBlock}>
             <img
               src={data.qr}

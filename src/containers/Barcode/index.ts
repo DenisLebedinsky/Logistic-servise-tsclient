@@ -1,1 +1,1 @@
-export { default } from './Barcode.jsx';
+export { default } from './Barcode';

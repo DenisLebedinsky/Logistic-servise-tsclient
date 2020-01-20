@@ -5,7 +5,8 @@ import { PackageType, PackagesActionTypes } from './types';
 const initialState: PackageType = {
   loading: false,
   error: false,
-  packages: []
+  packages: [],
+  count: 0
 };
 
 const reducer: Reducer<PackageType> = (
@@ -18,7 +19,12 @@ const reducer: Reducer<PackageType> = (
     case PackagesActionTypes.GET_PACKAGES:
       return { ...state, error: true, loading: true };
     case PackagesActionTypes.GET_PACKAGES_SUCCESS:
-      return { loading: false, error: false, packages: payload };
+      return {
+        loading: false,
+        error: false,
+        packages: payload.data,
+        count: payload.count
+      };
     case PackagesActionTypes.GET_PACKAGES_FAIL:
       return { ...state, error: true };
 
