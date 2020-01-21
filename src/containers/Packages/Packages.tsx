@@ -21,6 +21,7 @@ import Error from 'components/Error';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import ModalFormEdit from '../EditPackageModal';
+import CreatePackageModal from 'containers/Packages/CreatePackageModal';
 
 import styles from './Packages.module.scss';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -39,6 +40,7 @@ export default function Packages() {
   });
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowEditModal] = useState(false);
+  const [showModalCreate, setShowModalCreate] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -124,6 +126,15 @@ export default function Packages() {
     fetchData(page * rows, rows);
   };
 
+  // create modal
+  const openCreateModal = () => {
+    setShowModalCreate(true);
+  };
+
+  const closeCreateModal = () => {
+    setShowModalCreate(false);
+  };
+
   useEffect(() => {
     if (!data.packages.length && !data.error) {
       fetchData(0, rowsPerPage);
@@ -139,7 +150,7 @@ export default function Packages() {
         </div>
       ) : (
         <>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={openCreateModal}>
             Создать отправление
           </Button>
 
@@ -297,47 +308,6 @@ export default function Packages() {
                 ))}
               </TableBody>
             </Table>
-
-            <Modal
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              open={showModal}
-              onClose={closeModal}
-            >
-              <BarcodeModal data={modalData} closeModal={closeModal} />
-            </Modal>
-
-            <Modal
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              open={showModalEdit}
-              onClose={closeEdit}
-            >
-              <div id="modal-form">
-                <ModalFormEdit
-                  data={data.packages[currentIndex]}
-                  closeModal={closeEdit}
-                  deletePackage={deletePackage}
-                />
-              </div>
-            </Modal>
-
-            {/* <Modal */}
-            {/*  aria-labelledby="simple-modal-title" */}
-            {/*  aria-describedby="simple-modal-description" */}
-            {/*  open={open} */}
-            {/*  onClose={handleClose} */}
-            {/* > */}
-            {/*  <div id="modal-form"> */}
-            {/*    <ModalForm */}
-            {/*      create={true} */}
-            {/*      locations={locations} */}
-            {/*      closeModal={handleClose} */}
-            {/*      userid={user.id} */}
-            {/*      token={token} */}
-            {/*    /> */}
-            {/*  </div> */}
-            {/* </Modal> */}
           </Paper>
 
           <TablePagination
@@ -355,6 +325,45 @@ export default function Packages() {
           />
         </>
       )}
+
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={showModal}
+        onClose={closeModal}
+      >
+        <BarcodeModal data={modalData} closeModal={closeModal} />
+      </Modal>
+
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={showModalEdit}
+        onClose={closeEdit}
+      >
+        <div id="modal-form">
+          <ModalFormEdit
+            data={data.packages[currentIndex]}
+            closeModal={closeEdit}
+            deletePackage={deletePackage}
+          />
+        </div>
+      </Modal>
+
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={showModalCreate}
+        onClose={closeCreateModal}
+      >
+        <div id="modal-form">
+          <CreatePackageModal
+            create={true}
+            closeModal={closeCreateModal}
+            auth={auth}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }
