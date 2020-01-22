@@ -6,6 +6,7 @@
   max-width: 100%;
   margin-top: 30px;
   z-index: 100;
+
 }
 
 .formContainer {
@@ -14,6 +15,10 @@
   padding-top: 10px;
   border-radius: 5px;
   min-width: 50%;
+}
+
+.modal:focus{
+    outline: none;
 }
 
 .textFieldTitle {

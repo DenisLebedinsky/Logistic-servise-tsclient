@@ -6,7 +6,9 @@ const initialState: PackageType = {
   loading: false,
   error: false,
   packages: [],
-  count: 0
+  count: 0,
+  addedPackage: null,
+  updatedPackage: null
 };
 
 const reducer: Reducer<PackageType> = (
@@ -20,13 +22,16 @@ const reducer: Reducer<PackageType> = (
       return { ...state, error: true, loading: true };
     case PackagesActionTypes.GET_PACKAGES_SUCCESS:
       return {
+        ...state,
         loading: false,
         error: false,
         packages: payload.data,
         count: payload.count
       };
     case PackagesActionTypes.GET_PACKAGES_FAIL:
-      return { ...state, error: true };
+      return { ...state, error: true,loading: false };
+    case PackagesActionTypes.ADD_PACKAGE_SUCCESS:
+      return { ...state, addedPackage: payload };
 
     default:
       return state;

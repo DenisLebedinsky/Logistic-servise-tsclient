@@ -1,25 +1,24 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddCircle from '@material-ui/icons/AddCircle';
-import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
-import Barcode from 'containers/Barcode';
-import styles from './CreatePackageModal.module.scss';
-import { CreatePackageModalFC } from './types';
 
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
+import Barcode from 'containers/Barcode';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLocationsFromState } from 'redux/reducers/locations/selectors';
+import { getResultAdding } from 'redux/reducers/packages/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
 import { addPackage } from 'redux/reducers/packages/actions';
 
-type Item = {
-  title: string;
-  count: number;
-};
+import { Item, ReadOnly } from 'redux/reducers/packages/types';
+import { CreatePackageModalFC } from './types';
+import styles from './CreatePackageModal.module.scss';
+import './CreatePackage.scss';
 
 const ModalForm: React.FC<CreatePackageModalFC> = ({
   create,
@@ -29,7 +28,8 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   const [items, setItems] = useState<Item[]>([]);
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(1);
-  const [readOnly, setReadOnly] = useState({
+  const [created, setCreated] = useState(false);
+  const [readOnly, setReadOnly] = useState<ReadOnly>({
     status: false,
     qr: ''
   });
@@ -38,11 +38,19 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     popper: ''
   });
 
-  const { locations } = useSelector(getLocationsFromState);
+  const locationsData = useSelector(getLocationsFromState);
+  const resultAdding = useSelector(getResultAdding);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!locations.length) {
+    if (!locationsData.locations.length && !locationsData.loading) {
       dispatch(getLocations(auth.user.token, 0, 1000));
+    }
+  });
+
+  useEffect(() => {
+    if (created && resultAdding) {
+      setReadOnly({ qr: resultAdding.qr, status: true });
+      setCreated(false);
     }
   });
 
@@ -62,29 +70,27 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
           : [];
       const data = {
         resiverId: stateInput.single,
-        transit: transit,
+        transit,
         inventory: items,
         sendLocationId: auth.user.token
       };
 
       dispatch(addPackage(auth.user.token, data));
-      //   const res = await createPackage(data, token);
-      //   if (res !== 'error') {
-      //     setReadOnly({ status: true, qr: res.qr });
-      //   }
+
+      setCreated(true);
     }
   };
 
-  const handleCloseModal = () => () => {
+  const handleCloseModal = () => {
     closeModal();
   };
 
-  const changeTitle = () => (e: ChangeEvent<HTMLInputElement>) => {
+  const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const changeCount = () => (e: ChangeEvent<HTMLInputElement>) => {
-    setCount(parseInt(e.target.value));
+  const changeCount = (e: ChangeEvent<HTMLInputElement>) => {
+    setCount(parseInt(e.target.value, 10));
   };
 
   const addItem = () => {
@@ -102,10 +108,12 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     setItems(newItems);
   };
 
-  const suggestions = locations.map(loc => ({ label: loc.title }));
+  const suggestions = locationsData.locations.map(loc => ({
+    label: loc.title
+  }));
 
   const getResiveLoc = () => {
-    const res = locations.find(
+    const res = locationsData.locations.find(
       el => el._id === stateInput.single || el.title === stateInput.single
     );
 
@@ -119,7 +127,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   const getUserLocation = () => {
     const userLocation = auth.user.locationId;
     if (userLocation) {
-      const res = locations.find(el => el._id === userLocation);
+      const res = locationsData.locations.find(el => el._id === userLocation);
       if (res) {
         return res.title;
       }

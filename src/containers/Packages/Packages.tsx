@@ -146,7 +146,9 @@ export default function Packages() {
       {data.loading ? (
         <div className={styles.spiner}>
           <CircularProgress />
-          {data.error && <Error msg="Не удалось загрузить данные" />}
+          {!data.loading && data.error && (
+            <Error msg="Не удалось загрузить данные" />
+          )}
         </div>
       ) : (
         <>

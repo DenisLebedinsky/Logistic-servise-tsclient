@@ -40,6 +40,7 @@ export type Package = {
   status: string;
   comment: string;
   created: string;
+  qr?: string;
 };
 
 type TransitEditable = {
@@ -49,6 +50,30 @@ type TransitEditable = {
   date?: string;
   resivedDate?: string;
   sendfactLocId?: PopulationField | string;
+};
+
+export type Item = {
+  title: string;
+  count: number;
+};
+
+export type ReadOnly = {
+  status: boolean;
+  qr: string | undefined;
+};
+
+export type addNewPackage = {
+  resiverId: string;
+  transit: {
+    date: undefined;
+    sendLocId: {
+      title: string;
+    };
+    sendfactLocId: undefined;
+    userId: undefined;
+  }[];
+  inventory: Item[];
+  sendLocationId: string;
 };
 
 export type PackageEditable = {
@@ -73,6 +98,8 @@ export interface PackageType {
   error: boolean;
   packages: Package[];
   count: number;
+  addedPackage: Package | null;
+  updatedPackage: Package | null;
 }
 
 export enum PackagesActionTypes {
