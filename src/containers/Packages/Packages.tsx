@@ -59,8 +59,8 @@ export default function Packages() {
   };
 
   const closeEdit = () => {
+    setShowEditModal(false);
     fetchData(0, rowsPerPage);
-    setShowModal(false);
   };
 
   // modal

@@ -55,20 +55,19 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     popper: transit
   });
 
-  const getLoc = async () => {
-    dispatch(getLocations);
+  const getLoc = () => {
+    dispatch(getLocations(user.token, 0, 1000));
   };
 
   useEffect(() => {
-    if (locationsState.locations.length === 0) {
+    if (locationsState.locations.length === 0 && !locationsState.loading) {
       getLoc();
     }
   });
 
-  const sendData = () => async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const sendData = () =>  (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    
     editData.resiverId = stateInput.single;
 
     if (data.transit && data.transit.length > 0 && editData.transit[0]) {
@@ -92,9 +91,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     editData.inventory = items;
 
     dispatch(updatePackage(user.token, editData));
-    // if (res !== 'error') {
     setReadOnly({ status: true, qr: '13123' });
-    // }
   };
 
   const changeTitle = () => (event: React.ChangeEvent<HTMLInputElement>) => {

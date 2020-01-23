@@ -1,16 +1,16 @@
-// import ReactToPrint from 'react-to-print';
+import ReactToPrint from 'react-to-print';
 import { Button } from '@material-ui/core';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import styles from './Barcode.module.scss';
-import { BarcodeFC } from './types';
+// import { BarcodeFC } from './types';
 
-const Barcode: React.FC<BarcodeFC> = ({ data }) => {
-  //  const componentRef = useRef(null);
+const Barcode = ({ data }) => {
+  const componentRef = useRef();
   const [qrCount, setqrCount] = useState({ n: 1, arr: [1] });
 
-  const printImgCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const printImgCount = e => {
     const value = parseInt(e.target.value, 10);
     const newArr = [];
 
@@ -39,18 +39,22 @@ const Barcode: React.FC<BarcodeFC> = ({ data }) => {
         value={qrCount.n}
         onChange={e => printImgCount(e)}
       />
-      {/* <ReactToPrint */}
-      {/*  trigger={() => ( */}
-      <Button variant="contained" className={styles.qrElement} onClick={print}>
-        Печать
-      </Button>
-      {/*  )} */}
-      {/*  content={() => componentRef.current} */}
-      {/* /> */}
+      <ReactToPrint
+        trigger={() => (
+          <Button
+            variant="contained"
+            className={styles.qrElement}
+            onClick={print}
+          >
+            Печать
+          </Button>
+        )}
+        content={() => componentRef.current}
+      />
       <div
         id="printQR"
         className={styles.qrNoPrint}
-        //     ref={componentRef}
+        ref={componentRef}
       >
         {qrCount.arr.map((el, i) => (
           // eslint-disable-next-line react/no-array-index-key

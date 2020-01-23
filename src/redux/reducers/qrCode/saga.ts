@@ -7,18 +7,16 @@ import { getQRCode, getQRCodeFail, getQRCodeSuccess } from './actions';
 
 function* getQRCodeSaga(action: ReturnType<typeof getQRCode>) {
   try {
-      console.log('sags statr');
     const { token, id } = action.payload;
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
     const result: any = yield api.post('/package/getBarcode', { id });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
-
-    yield put(getQRCodeSuccess(result.data));
+    yield put(getQRCodeSuccess({ qr: result.data }));
   } catch (error) {
     yield put(getQRCodeFail(error));
   }
