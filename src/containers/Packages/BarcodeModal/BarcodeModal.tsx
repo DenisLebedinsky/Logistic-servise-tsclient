@@ -25,7 +25,7 @@ const BarcodeModal: React.FC<BarcodeModalFC> = ({ data, closeModal }) => {
   function handleClose(e: React.MouseEvent) {
     closeModal();
   }
-console.log(qrCode);
+
   return (
     <div id="modal-qr" className={styles.containerModal}>
       <div className={styles.barcodeModal}>

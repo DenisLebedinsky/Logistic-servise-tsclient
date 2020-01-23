@@ -1,0 +1,61 @@
+.modal {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: top;
+  
+    background-color: #fff;
+    border-radius: 5px;
+    margin-top: 100px;
+    padding: 15px;
+  }
+  
+  .headerModal {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 100%;
+  margin-top: 10px;
+  z-index: 100;
+}
+
+.formContainer {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  min-width: 50%;
+}
+
+.textField {
+  width: 100%;
+  margin: 20px;
+}
+
+.icon {
+  margin: 20px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.closeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.formControl {
+  margin: 20px;
+  min-width: 120px;
+}

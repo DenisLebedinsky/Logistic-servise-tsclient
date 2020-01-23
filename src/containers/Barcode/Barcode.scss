@@ -1,0 +1,39 @@
+.barcode {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+
+  &-item {
+    margin: 0 30px 0 30px!important;
+  }
+
+  &-input {
+    width: 50px;
+  }
+
+  &-notPrint {
+    display: none;
+  }
+
+  &-block {
+    width: 250px;
+    padding: 30px;
+    overflow: hidden;
+
+    &-info {
+      padding-left: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-value {
+      font-weight: 800;
+    }
+
+    &-img {
+      width: 305px;
+      height: 320px;
+    }
+  }
+}

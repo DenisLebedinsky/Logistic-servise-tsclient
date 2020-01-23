@@ -6,7 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Backdrop from '@material-ui/core/Backdrop';
 import EditIcon from '@material-ui/icons/Edit';
+import Fade from '@material-ui/core/Fade';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import Modal from '@material-ui/core/Modal';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -329,8 +331,18 @@ export default function Packages() {
         aria-describedby="simple-modal-description"
         open={showModal}
         onClose={closeModal}
+        className={styles.modal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
       >
-        <BarcodeModal data={modalData} closeModal={closeModal} />
+        <Fade in={showModal}>
+          <div>
+            <BarcodeModal data={modalData} closeModal={closeModal} />
+          </div>
+        </Fade>
       </Modal>
 
       <Modal
@@ -338,14 +350,22 @@ export default function Packages() {
         aria-describedby="simple-modal-description"
         open={showModalEdit}
         onClose={closeEdit}
+        className={styles.modal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
       >
-        <div id="modal-form">
-          <EditPackageModal
-            data={data.packages[currentIndex]}
-            closeModal={closeEdit}
-            deletePackage={deletePackage}
-          />
-        </div>
+        <Fade in={showModalEdit}>
+          <div id="modal-form">
+            <EditPackageModal
+              data={data.packages[currentIndex]}
+              closeModal={closeEdit}
+              deletePackage={deletePackage}
+            />
+          </div>
+        </Fade>
       </Modal>
 
       <Modal
@@ -353,14 +373,22 @@ export default function Packages() {
         aria-describedby="simple-modal-description"
         open={showModalCreate}
         onClose={closeCreateModal}
+        className={styles.modal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
       >
-        <div id="modal-form">
-          <CreatePackageModal
-            create
-            closeModal={closeCreateModal}
-            auth={auth}
-          />
-        </div>
+        <Fade in={showModalCreate}>
+          <div id="modal-form">
+            <CreatePackageModal
+              create
+              closeModal={closeCreateModal}
+              auth={auth}
+            />
+          </div>
+        </Fade>
       </Modal>
     </div>
   );
