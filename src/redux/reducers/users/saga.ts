@@ -105,7 +105,7 @@ function* watchDeleteUsersaga() {
   yield takeEvery(UsersActionTypes.DELETE_USER, deleteUsersaga);
 }
 // main
-function* UsersSaga() {
+function* usersSaga() {
   yield all([
     fork(watchGetUsersSaga),
     fork(watchAddUsersaga),
@@ -114,4 +114,4 @@ function* UsersSaga() {
   ]);
 }
 
-export default UsersSaga;
+export default usersSaga;

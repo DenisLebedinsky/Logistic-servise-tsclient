@@ -7,6 +7,7 @@ import { getQRCode, getQRCodeFail, getQRCodeSuccess } from './actions';
 
 function* getQRCodeSaga(action: ReturnType<typeof getQRCode>) {
   try {
+      console.log('sags statr');
     const { token, id } = action.payload;
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
