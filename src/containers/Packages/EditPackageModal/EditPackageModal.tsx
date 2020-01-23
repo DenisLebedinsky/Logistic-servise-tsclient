@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from './EditPackageModal.module.scss';
-import { TextField, Button } from '@material-ui/core';
-
-import { getLocations } from 'redux/reducers/locations/actions';
-import { getLocationsFromState } from 'redux/reducers/locations/selectors';
-import { updatePackage } from 'redux/reducers/packages/actions';
-import { getAuth } from 'redux/reducers/auth/selectors';
-
+import { Button, TextField } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddCircle from '@material-ui/icons/AddCircle';
-import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
-import { EditPackageModalFC } from './types';
+
+import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
+import { getAuth } from 'redux/reducers/auth/selectors';
+import { updatePackage } from 'redux/reducers/packages/actions';
+import { getLocationsFromState } from 'redux/reducers/locations/selectors';
+import { getLocations } from 'redux/reducers/locations/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { PackageEditable } from 'redux/reducers/packages/types';
+
+import styles from './EditPackageModal.module.scss';
+import { EditPackageModalFC } from './types';
 
 const ModalFormEdit: React.FC<EditPackageModalFC> = ({
   data,
@@ -25,7 +25,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
 }) => {
   const editData: PackageEditable = { ...data };
 
-  let dataItems = data.inventory
+  const dataItems = data.inventory
     ? data.inventory.map(el => ({ title: el.title, count: el.count }))
     : [];
 
@@ -68,8 +68,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
   const sendData = () => async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    //if (stateInput.single) {
-
+    
     editData.resiverId = stateInput.single;
 
     if (data.transit && data.transit.length > 0 && editData.transit[0]) {
@@ -102,8 +101,8 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     setTitle(event.target.value);
   };
 
-  const changeCount = () => (evant: React.ChangeEvent<HTMLInputElement>) => {
-    setCount(parseInt(evant.target.value));
+  const changeCount = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCount(parseInt(event.target.value, 10));
   };
 
   const addItem = () => {

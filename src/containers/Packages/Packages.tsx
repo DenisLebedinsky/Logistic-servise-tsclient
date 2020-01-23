@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import Modal from '@material-ui/core/Modal';
+import TablePagination from '@material-ui/core/TablePagination';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
@@ -16,27 +18,22 @@ import { Package, PackageType } from 'redux/reducers/packages/types';
 import { getAuth } from 'redux/reducers/auth/selectors';
 import { getPackages } from 'redux/reducers/packages/actions';
 import { getPackagesFromState } from 'redux/reducers/packages/selectors';
-import BarcodeModal from 'components/Packages/BarcodeModal';
+import BarcodeModal from 'containers/Packages/BarcodeModal';
 import Error from 'components/Error';
-import TablePagination from '@material-ui/core/TablePagination';
-
-import ModalFormEdit from '../EditPackageModal';
 import CreatePackageModal from 'containers/Packages/CreatePackageModal';
 
+import EditPackageModal from './EditPackageModal';
 import styles from './Packages.module.scss';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function Packages() {
   const dispatch = useDispatch();
   const auth = useSelector(getAuth);
   const data: PackageType = useSelector(getPackagesFromState);
-  const getBarcode = (qr: string) => qr;
 
   const [modalData, setModalData] = useState({
     location: '',
     resiveLoc: '',
-    id: '',
-    qr: ''
+    id: ''
   });
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowEditModal] = useState(false);
@@ -58,7 +55,7 @@ export default function Packages() {
   // edit modal
   const handleOpenEdit = (index: number) => {
     setCurrentIndex(index);
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
   const closeEdit = () => {
@@ -68,14 +65,13 @@ export default function Packages() {
 
   // modal
   const handleOpenModalBarcode = async (packageItem: Package) => {
-    const qr = await getBarcode(packageItem._id);
-
     setModalData({
-      qr,
       id: packageItem._id,
       location: packageItem.sendLocationId && packageItem.sendLocationId.title,
       resiveLoc: packageItem.resiverId && packageItem.resiverId.title
     });
+
+    setShowModal(true);
   };
 
   const closeModal = () => {
@@ -344,7 +340,7 @@ export default function Packages() {
         onClose={closeEdit}
       >
         <div id="modal-form">
-          <ModalFormEdit
+          <EditPackageModal
             data={data.packages[currentIndex]}
             closeModal={closeEdit}
             deletePackage={deletePackage}
@@ -360,7 +356,7 @@ export default function Packages() {
       >
         <div id="modal-form">
           <CreatePackageModal
-            create={true}
+            create
             closeModal={closeCreateModal}
             auth={auth}
           />

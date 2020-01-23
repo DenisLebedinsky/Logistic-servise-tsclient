@@ -21,9 +21,9 @@ const Barcode: React.FC<BarcodeFC> = ({ data }) => {
     setqrCount({ n: value, arr: newArr });
   };
 
-  const print = () =>()=> {
+  const print = () => () => {
     window.print();
-  }
+  };
 
   return (
     <div className={styles.qrBlock}>

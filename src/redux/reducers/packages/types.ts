@@ -59,7 +59,8 @@ export type Item = {
 
 export type ReadOnly = {
   status: boolean;
-  qr: string | undefined;
+  qr: string;
+  id: string;
 };
 
 export type addNewPackage = {

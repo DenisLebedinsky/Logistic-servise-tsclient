@@ -14,8 +14,8 @@ import { getLocationsFromState } from 'redux/reducers/locations/selectors';
 import { getResultAdding } from 'redux/reducers/packages/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
 import { addPackage } from 'redux/reducers/packages/actions';
-
 import { Item, ReadOnly } from 'redux/reducers/packages/types';
+
 import { CreatePackageModalFC } from './types';
 import styles from './CreatePackageModal.module.scss';
 import './CreatePackage.scss';
@@ -31,7 +31,8 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   const [created, setCreated] = useState(false);
   const [readOnly, setReadOnly] = useState<ReadOnly>({
     status: false,
-    qr: ''
+    qr: '',
+    id: ''
   });
   const [stateInput, setStateInput] = React.useState({
     single: '',
@@ -49,7 +50,11 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
 
   useEffect(() => {
     if (created && resultAdding) {
-      setReadOnly({ qr: resultAdding.qr, status: true });
+      setReadOnly({
+        qr: resultAdding.qr || '',
+        status: true,
+        id: resultAdding._id
+      });
       setCreated(false);
     }
   });
@@ -145,13 +150,17 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     >
       <div className={styles.formContainer}>
         <div className={styles.closeIcon}>
-          <h2>Опись отправления {create && '(создание)'}</h2>
+          <h2>
+            Опись отправления
+            {create && '(создание)'}
+          </h2>
           <CloseIcon onClick={handleCloseModal} />
         </div>
 
         {readOnly.status && (
           <Barcode
             data={{
+              id: readOnly.id,
               qr: readOnly.qr,
               location: getUserLocation(),
               resiveLoc: getResiveLoc()

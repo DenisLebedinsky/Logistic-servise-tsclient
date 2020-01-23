@@ -1,7 +1,8 @@
 export interface BarcodeFC {
   data: {
-    qr: string | undefined;
+    qr: string;
     location: string;
     resiveLoc: string;
+    id: string;
   };
 }

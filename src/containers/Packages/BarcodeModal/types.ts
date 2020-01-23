@@ -1,5 +1,4 @@
 export type Params = {
-  qr: string;
   id: string;
   location: string;
   resiveLoc: string;
