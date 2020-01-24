@@ -15,7 +15,7 @@ const reducer: Reducer<UserType> = (state = initialState, action) => {
     case UsersActionTypes.GET_USERS:
       return state;
     case UsersActionTypes.GET_USERS_SUCCESS:
-      return { ...state, ...payload };
+      return { ...state, users: payload };
     case UsersActionTypes.GET_USERS_FAIL:
       return { ...state, ...payload };
     default:

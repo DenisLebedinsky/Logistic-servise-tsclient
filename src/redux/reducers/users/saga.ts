@@ -26,7 +26,7 @@ function* getUsersSaga(action: ReturnType<typeof getUsers>) {
 
     const result: any = yield api.post('/users/', { skip, limit });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 
@@ -42,9 +42,9 @@ function* addUserSaga(action: ReturnType<typeof addUser>) {
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/User/create', newUser);
+    const result: any = yield api.post('/users/create', newUser);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get update');
     }
 
@@ -59,9 +59,9 @@ function* updateUsersaga(action: ReturnType<typeof updateUser>) {
     const { token, editedUser } = action.payload;
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/package/update/', editedUser);
+    const result: any = yield api.post('/users/update/', editedUser);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 
@@ -76,9 +76,9 @@ function* deleteUsersaga(action: ReturnType<typeof deleteUser>) {
     const { token, id } = action.payload;
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/package/delete', { id });
+    const result: any = yield api.post('/users/delete', { id });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 

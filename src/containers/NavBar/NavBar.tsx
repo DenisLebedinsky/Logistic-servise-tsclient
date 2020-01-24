@@ -66,7 +66,7 @@ const NavBar: React.FC = () => {
     };
   };
 
-  const handleChange = (event: any, newValue: any) => {
+  const handleChange = (event: any, newValue: number) => {
     setPath(newValue);
     if (newValue === 0) {
       history.push('/');

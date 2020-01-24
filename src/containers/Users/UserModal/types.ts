@@ -1,6 +1,6 @@
-import { UserEditable } from 'redux/reducers/users/types';
+import { User } from 'redux/reducers/users/types';
 
 export interface UserModal {
   closeModal: Function;
-  editUser: UserEditable;
+  editUser: User;
 }

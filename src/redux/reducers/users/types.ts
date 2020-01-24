@@ -7,6 +7,8 @@ export type User = {
     _id: string;
     title: string;
   };
+  _id?: string;
+  id?: string;
 };
 
 export type UserEditable = {
@@ -15,13 +17,13 @@ export type UserEditable = {
   login: string;
   phone: string;
   role: string;
-  locationId: UserLocation | string;
+  locationId: string;
 };
 
-type UserLocation = {
-  _id: string;
-  title: string;
-};
+// type UserLocation = {
+//   _id: string;
+//   title: string;
+// };
 
 export type UserType = {
   loading: boolean;

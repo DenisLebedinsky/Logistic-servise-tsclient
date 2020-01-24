@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -40,8 +41,7 @@ const Users: React.FC = () => {
     }
   });
 
-  const handleOpen = (user: UserType) => {
-    setEditUser(user);
+  const createNew = () => {
     setOpen(true);
   };
 
@@ -50,7 +50,7 @@ const Users: React.FC = () => {
     dispatch(getUsers(auth.user.token, 0, 1000));
   };
 
-  const setClassnameIventory = i => {
+  const setClassnameIventory = (i: number) => {
     if (i % 2 !== 0) return styles.rowGrey;
 
     return '';
@@ -58,16 +58,23 @@ const Users: React.FC = () => {
 
   const showModal = (item: UserType) => {
     setEditUser(item);
+    setOpen(true);
   };
 
   return (
-    <div>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
+    <div className={styles.users}>
+      <Button variant="contained" color="primary" onClick={createNew}>
         Создать пользователя
       </Button>
 
-      <Paper className={styles.root}>
-        <Table className={styles.table} style={{ borderColor: 'black' }}>
+      <TableContainer component={Paper} className={styles.root}>
+        <Table
+          className={styles.table}
+          size="small"
+          style={{ borderColor: 'black' }}
+          stickyHeader
+          aria-label="users table"
+        >
           <TableHead>
             <TableRow>
               <TableCell align="left" className={styles.cellNumber}>
@@ -82,33 +89,32 @@ const Users: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {usersData.users.length &&
-              usersData.users.map((item, indexRow) => (
-                <TableRow
-                  key={item._id}
-                  className={setClassnameIventory(indexRow)}
-                >
-                  <TableCell align="left" component="th" scope="row">
-                    {indexRow + 1}
-                  </TableCell>
-                  <TableCell align="left">{item.name}</TableCell>
-                  <TableCell align="left">{item.login}</TableCell>
-                  <TableCell align="left">{item.phone}</TableCell>
-                  <TableCell align="left">{item.role}</TableCell>
-                  <TableCell align="left">
-                    {item.locationId && item.locationId.title}
-                  </TableCell>
-                  <TableCell align="left" className={styles.del}>
-                    <EditIcon
-                      onClick={() => showModal(item)}
-                      className={styles.actionEdit}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+            {usersData.users.map((item, indexRow) => (
+              <TableRow
+                key={`USER_${indexRow}`}
+                className={setClassnameIventory(indexRow)}
+              >
+                <TableCell align="left" component="th" scope="row">
+                  {indexRow + 1}
+                </TableCell>
+                <TableCell align="left">{item.name}</TableCell>
+                <TableCell align="left">{item.login}</TableCell>
+                <TableCell align="left">{item.phone}</TableCell>
+                <TableCell align="left">{item.role}</TableCell>
+                <TableCell align="left">
+                  {item.locationId && item.locationId.title}
+                </TableCell>
+                <TableCell align="left" className={styles.del}>
+                  <EditIcon
+                    onClick={() => showModal(item)}
+                    className={styles.actionEdit}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
-      </Paper>
+      </TableContainer>
 
       <Modal
         aria-labelledby="simple-modal-title"

@@ -79,7 +79,7 @@ function* deleteLocationSaga(action: ReturnType<typeof deleteLocation>) {
 
     const result: any = yield api.post('/package/delete', { id });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 

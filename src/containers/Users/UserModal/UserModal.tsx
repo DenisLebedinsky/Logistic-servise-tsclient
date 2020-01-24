@@ -1,8 +1,9 @@
-import { Button, FormHelperText, TextField } from '@material-ui/core';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { Button, TextField } from '@material-ui/core';
+
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import CloseIcon from '@material-ui/icons/Close';
+import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -11,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuth } from 'redux/reducers/auth/selectors';
 import { getLocationsFromState } from 'redux/reducers/locations/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
-import { addUser, updateUser } from 'redux/reducers/users/actions';
+//import { addUser, updateUser } from 'redux/reducers/users/actions';
 
 import { UserModal } from './types';
 import styles from './UserModal.module.scss';
@@ -31,6 +32,7 @@ type EditUser = {
   phone: string;
   role: string;
   locationId: Location | string;
+  locationIdErr: boolean;
 };
 
 const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
@@ -43,43 +45,51 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     pswErr: false,
     phone: '',
     role: 'user',
-    locationId: {
-      _id: '',
-      title: ''
-    }
+    locationId: '',
+    locationIdErr: false
   };
 
   const dispatch = useDispatch();
   const locationsData = useSelector(getLocationsFromState);
   const auth = useSelector(getAuth);
 
-//  const edit = editUser.hasOwnProperty('_id');
+  const edit = editUser.hasOwnProperty('_id');
 
-//   if (edit) {
-//     initialUser.name = editUser.name;
-//     initialUser.login = editUser.login;
-//     initialUser.phone = editUser.phone;
-//     initialUser.role = editUser.role;
-//     initialUser.locationId = editUser.locationId;
-//   }
+  if (edit) {
+    initialUser.name = editUser.name;
+    initialUser.login = editUser.login;
+    initialUser.phone = editUser.phone;
+    initialUser.role = editUser.role;
+    initialUser.locationId = editUser.locationId.title;
+  }
 
   const [user, setUser] = useState(initialUser);
 
-  useEffect(() => {
-    if (locationsData.locations.length === 0) {
-      dispatch(getLocations(auth.user.token, 0, 1000));
-    }
-  });
+  const inputLabel = React.useRef<HTMLLabelElement>(null);
+  const [labelWidth, setLabelWidth] = React.useState(0);
 
-//   const checkfill = () => {
-//     return {
-//       nameErr: user.name === '',
-//       loginErr: user.login === '',
-//       pswErr: user.password === '',
-//       phone: user.phone === '',
-//       locationId: user.locationId === ''
-//     };
-//   };
+  useEffect(() => {
+    setLabelWidth(inputLabel.current!.offsetWidth);
+  }, []);
+
+  useEffect(() => {
+    if (
+      !locationsData.error &&
+      !locationsData.loading &&
+      !locationsData.locations.length
+    )
+      dispatch(getLocations(auth.user.token, 0, 1000));
+  }, [locationsData]);
+
+  const checkfill = () => {
+    return {
+      nameErr: user.name === '',
+      loginErr: user.login === '',
+      pswErr: user.password === '',
+      phoneErr: user.phone === '',
+      locationIdErr: user.locationId === ''
+    };
+  };
 
   const sendData = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -88,21 +98,25 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
 
     if (
       !edit &&
-      (dataErr.nameErr || dataErr.loginErr || dataErr.pswErr || dataErr.phone)
+      (dataErr.nameErr ||
+        dataErr.loginErr ||
+        dataErr.pswErr ||
+        dataErr.phoneErr)
     ) {
       setUser({ ...user, ...dataErr });
     } else {
       let res;
 
       if (edit) {
-        user.id = editUser._id;
-
-        dispatch(updateUser(auth.user.token, user));
+        // user.id = editUser._id;
+        console.log(user);
+        //  dispatch(updateUser(auth.user.token, user));
       } else {
-        dispatch(addUser(auth.user.token, user));
+        console.log(user);
+        // dispatch(addUser(auth.user.token, user));
       }
       if (res !== 'erroe') {
-        closeModal();
+        // closeModal();
       }
     }
   };
@@ -115,7 +129,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     setUser({ ...user, login: event.target.value, loginErr: false });
   };
 
-  const changePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changePassword = (event: React.ChangeEvent<{ value: string }>) => {
     setUser({ ...user, password: event.target.value, pswErr: false });
   };
 
@@ -123,12 +137,16 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     setUser({ ...user, phone: event.target.value });
   };
 
-  const changeRole = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, role: event.target.value });
+  const changeRole = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUser({ ...user, role: `${event.target.value}` });
   };
 
-  const changeLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, locationId: event.target.value });
+  const changeLocation = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUser({ ...user, locationId: `${event.target.value}` });
+  };
+
+  const handleClose = () => {
+    closeModal();
   };
 
   return (
@@ -146,7 +164,6 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
         className={styles.container}
         noValidate
         autoComplete="off"
-        onSubmit={e => sendData(e)}
       >
         <div className={styles.formContainer}>
           <div className={styles.itemInput}>
@@ -171,7 +188,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
               error={user.loginErr}
             />
             <TextField
-              id="outlined-login"
+              id="outlined-password"
               label={edit ? 'Новый пароль' : 'Пароль'}
               type="text"
               className={styles.textField}
@@ -181,7 +198,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
               error={user.pswErr}
             />
             <TextField
-              id="outlined-login"
+              id="outlined-phone"
               label="телефон"
               type="text"
               className={styles.textField}
@@ -190,29 +207,31 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
               variant="outlined"
             />
             <div>
-              <FormControl className={styles.formControl}>
-                <FormHelperText>Лока</FormHelperText>
+              <FormControl
+                variant="outlined"
+                className={styles.formControl}
+                error={user.locationIdErr}
+              >
+                <InputLabel ref={inputLabel}>Локация</InputLabel>
                 <Select
                   value={user.locationId}
                   onChange={changeLocation}
-                  input={
-                    <OutlinedInput name="Локация" id="outlined-age-simple" />
-                  }
+                  labelWidth={labelWidth}
                 >
-                  {locations &&
-                    locations.map(option => (
+                  {locationsData.locations &&
+                    locationsData.locations.map(option => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.title}
                       </MenuItem>
                     ))}
                 </Select>
               </FormControl>
-              <FormControl className={styles.formControl}>
-                <FormHelperText>Роль</FormHelperText>
+              <FormControl variant="outlined" className={styles.formControl}>
+                <InputLabel ref={inputLabel}>Роль</InputLabel>
                 <Select
                   value={user.role}
                   onChange={changeRole}
-                  input={<OutlinedInput name="Роль" id="outlined-age-simple" />}
+                  labelWidth={labelWidth}
                 >
                   <MenuItem value="admin">admin</MenuItem>
                   <MenuItem value="user">user</MenuItem>
@@ -222,10 +241,11 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
           </div>
           <div className={styles.footer}>
             <Button
-              type="submit"
+              type="button"
               variant="contained"
               color="primary"
               className={styles.button}
+              onClick={sendData}
             >
               {edit ? 'Изменить' : 'Создать'}
             </Button>

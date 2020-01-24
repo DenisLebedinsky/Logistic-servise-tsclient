@@ -1,20 +1,20 @@
 .modal {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: top;
-  
-    background-color: #fff;
-    border-radius: 5px;
-    margin-top: 100px;
-    padding: 15px;
-  }
-  
-  .headerModal {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-  }
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-top: 100px;
+  padding: 15px;
+}
+
+.headerModal {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
 
 .container {
   display: flex;
@@ -27,15 +27,15 @@
 }
 
 .formContainer {
-  background-color: #fff;
+  background-color: #FFFFFF;
   padding: 10px;
   border-radius: 5px;
   min-width: 50%;
 }
 
 .textField {
-  width: 100%;
-  margin: 20px;
+  width: 100%!important;
+  margin: 10px!important;
 }
 
 .icon {
@@ -56,6 +56,6 @@
 }
 
 .formControl {
-  margin: 20px;
-  min-width: 120px;
+  margin: 20px!important;
+  min-width: 120px!important;
 }

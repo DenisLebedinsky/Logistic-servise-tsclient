@@ -5,8 +5,8 @@ import { User, UsersActionTypes } from './types';
 export const getUsers = (token: string, skip: number, limit: number) =>
   action(UsersActionTypes.GET_USERS, { token, skip, limit });
 
-export const getUsersSuccess = (token: string) =>
-  action(UsersActionTypes.GET_USERS_SUCCESS, { token });
+export const getUsersSuccess = (users: User[]) =>
+  action(UsersActionTypes.GET_USERS_SUCCESS, users);
 
 export const getUsersFail = (err: string) =>
   action(UsersActionTypes.GET_USERS_FAIL, { error: err });
