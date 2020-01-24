@@ -12,28 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuth } from 'redux/reducers/auth/selectors';
 import { getLocationsFromState } from 'redux/reducers/locations/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
-//import { addUser, updateUser } from 'redux/reducers/users/actions';
+import { addUser, updateUser } from 'redux/reducers/users/actions';
 
-import { UserModal } from './types';
+import { UserModal, EditUser } from './types';
 import styles from './UserModal.module.scss';
 
-type Location = {
-  _id: '';
-  title: '';
-};
-
-type EditUser = {
-  name: string;
-  nameErr: boolean;
-  login: string;
-  loginErr: boolean;
-  password: string;
-  pswErr: boolean;
-  phone: string;
-  role: string;
-  locationId: Location | string;
-  locationIdErr: boolean;
-};
 
 const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
   const initialUser: EditUser = {
@@ -53,14 +36,14 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
   const locationsData = useSelector(getLocationsFromState);
   const auth = useSelector(getAuth);
 
-  const edit = editUser.hasOwnProperty('_id');
+  const edit = editUser._id !== "";
 
   if (edit) {
     initialUser.name = editUser.name;
     initialUser.login = editUser.login;
     initialUser.phone = editUser.phone;
     initialUser.role = editUser.role;
-    initialUser.locationId = editUser.locationId.title;
+    initialUser.locationId = editUser.locationId;
   }
 
   const [user, setUser] = useState(initialUser);
@@ -105,19 +88,24 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     ) {
       setUser({ ...user, ...dataErr });
     } else {
-      let res;
+
+      const newUser = {
+        name: user.name,
+        login: user.login,
+        password: user.password,
+        phone: user.phone,
+        role: user.role,
+        locationId: user.locationId
+      };
 
       if (edit) {
-        // user.id = editUser._id;
-        console.log(user);
-        //  dispatch(updateUser(auth.user.token, user));
+        console.log({ ...newUser, id: editUser._id })
+        dispatch(updateUser(auth.user.token, { ...newUser, id: editUser._id }));
       } else {
-        console.log(user);
-        // dispatch(addUser(auth.user.token, user));
+        console.log(newUser)
+        dispatch(addUser(auth.user.token, newUser));
       }
-      if (res !== 'erroe') {
-        // closeModal();
-      }
+      closeModal();
     }
   };
 

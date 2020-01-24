@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { User, UsersActionTypes } from './types';
+import { User, UsersActionTypes, UserEditable, UserAdded} from './types';
 
 export const getUsers = (token: string, skip: number, limit: number) =>
   action(UsersActionTypes.GET_USERS, { token, skip, limit });
@@ -12,7 +12,7 @@ export const getUsersFail = (err: string) =>
   action(UsersActionTypes.GET_USERS_FAIL, { error: err });
 
 // add
-export const addUser = (token: string, newUser: User) =>
+export const addUser = (token: string, newUser: UserAdded) =>
   action(UsersActionTypes.ADD_USER, { token, newUser });
 
 export const addUserSuccess = (newUser: User) =>
@@ -22,7 +22,7 @@ export const addUserFail = (error: string) =>
   action(UsersActionTypes.ADD_USER_FAIL, error);
 
 // update
-export const updateUser = (token: string, editedUser: User) =>
+export const updateUser = (token: string, editedUser: UserEditable) =>
   action(UsersActionTypes.UPDATE_USER, { token, editedUser });
 
 export const updateUserSuccess = (updatedUser: User) =>

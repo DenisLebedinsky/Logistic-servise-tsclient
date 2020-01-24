@@ -24,15 +24,13 @@ const Users: React.FC = () => {
   const usersData = useSelector(getUserFromState);
   const auth = useSelector(getAuth);
   const [open, setOpen] = useState(false);
-  const [editUser, setEditUser] = useState<UserType>({
+  const [editUser, setEditUser] = useState({
+    _id: '',
     name: '',
     login: '',
     phone: '',
     role: '',
-    locationId: {
-      _id: '',
-      title: ''
-    }
+    locationId: ''
   });
 
   useEffect(() => {
@@ -57,7 +55,7 @@ const Users: React.FC = () => {
   };
 
   const showModal = (item: UserType) => {
-    setEditUser(item);
+    setEditUser({ ...item, locationId: item.locationId.title });
     setOpen(true);
   };
 

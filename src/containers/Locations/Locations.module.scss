@@ -1,0 +1,73 @@
+.containerModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .Modal {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: top;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    margin-top: 100px;
+    padding: 15px;
+  }
+
+  .headerModal {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  // table
+  .root {
+    width: 100%;
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  .table {
+    min-width: 650px;
+  }
+  .rowGrey {
+    backgroundColor: #f2f6fc;
+  }
+  .cellNumber {
+    max-width: 10px;
+  }
+  .cellInventory {
+    min-width: 300px;
+
+    padding: 0;
+  }
+  .inventory {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+  }
+  .containerModal {
+    display: flex;
+    justify-content: center;
+    align-Items: center;
+    width: 100%;
+  }
+  .barcodeModal {
+    display: flex;
+    justify-content: center;
+    align-Items: top;
+    width: 30%;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-top: 100px;
+    padding: 15px;
+  }
+  .statusInProcess {
+    color: grey;
+  }
+  .StatusDelivered {
+    color: green;
+  }
+  
