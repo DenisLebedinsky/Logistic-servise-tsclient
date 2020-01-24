@@ -10,6 +10,15 @@ export interface Locations {
   locations: Location[];
 }
 
+export interface AddLocation {
+  title: string;
+}
+
+export interface UpdateLocation {
+  id: string;
+  title: string;
+}
+
 export enum LocationsActionTypes {
   GET_LOCATIONS = '@@LOCATIONS/GET_LOCATIONS',
   GET_LOCATIONS_SUCCESS = '@@LOCATIONS/GET_LOCATIONS_SUCCESS',

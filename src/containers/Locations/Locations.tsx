@@ -14,48 +14,48 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import EditIcon from "@material-ui/icons/Edit";
+import { Location } from "redux/reducers/locations/types";
+import { getLocations } from 'redux/reducers/locations/actions';
+import styles from './Locations.module.scss';
 
 function Locations() {
   const dispatch = useDispatch();
-  const locationData = useSelector(getLocationsFromState);
+  const LocationsData = useSelector(getLocationsFromState);
   const auth = useSelector(getAuth);
 
   const [open, setOpen] = useState(false);
-  const [editLoc, setEditLoc] = useState(false);
+  const [editLocation, setEditLocation] = useState({ _id: '', title: '' });
 
-  const handleOpen = newLoc => {
-    setEditLoc(newLoc);
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+  const handleOpenEdit = (e: React.MouseEvent<SVGSVGElement, MouseEvent>, location: Location) => {
+    setEditLocation(location);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    getLocations();
+    dispatch(getLocations(auth.user.token, 0, 1000))
   };
 
   useEffect(() => {
-    if (locations.length === 0) {
-      getLocations();
+    if (!LocationsData.error && !LocationsData.loading && LocationsData.locations.length === 0) {
+      dispatch(getLocations(auth.user.token, 0, 1000))
     }
   });
 
-  const getLocations = async () => {
-    //setLocations(await api.getLocations(token));
-  };
 
-
-  const setClassnameIventory = i => {
+  const setClassnameIventory = (i: number) => {
     if (i % 2 !== 0) return styles.rowGrey;
 
     return "";
   };
 
-  const showModal = item => () => {
-    openModal(item);
-  };
 
   return (
-    <div>
+    <div className={styles.locations}>
       <Button variant="contained" color="primary" onClick={handleOpen}>
         Создать локацию
       </Button>
@@ -70,25 +70,23 @@ function Locations() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(data) &&
-              data.map((item, indexRow) => (
-                <TableRow
-                  key={item._id}
-                  className={setClassnameIventory(indexRow)}
-                >
-                  <TableCell component="th" scope="row">
-                    {indexRow + 1}
-                  </TableCell>
-                  <TableCell align="left">{item.title}</TableCell>
-                  <TableCell align="left" className={styles.del}>
-                    {/* <CancelIcon onClick={() => delLocation(item._id)} /> */}
-                    <EditIcon
-                      onClick={showModal(item)}
-                      className={styles.actionEdit}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+            {LocationsData.locations.map((item, indexRow) => (
+              <TableRow
+                key={item._id}
+                className={setClassnameIventory(indexRow)}
+              >
+                <TableCell component="th" scope="row">
+                  {indexRow + 1}
+                </TableCell>
+                <TableCell align="left">{item.title}</TableCell>
+                <TableCell align="left">
+                  <EditIcon
+                    onClick={(e) => handleOpenEdit(e, item)}
+                    className={styles.actionEdit}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Paper>
@@ -103,17 +101,15 @@ function Locations() {
           <div className={styles.Modal}>
             <div className={styles.headerModal}>
               <Typography variant="h6">
-                {editLoc.hasOwnProperty("_id")
+                {editLocation._id !== ''
                   ? "Изменение локации"
                   : "Создание новой локации"}
               </Typography>
               <CloseIcon onClick={handleClose} />
             </div>
             <LocationsModal
-              token={token}
               closeModal={handleClose}
-              getLocations={getLocations}
-              editLoc={editLoc}
+              editLocation={editLocation}
             />
           </div>
         </div>

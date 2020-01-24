@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { Location, LocationsActionTypes } from './types';
+import { Location, LocationsActionTypes, AddLocation, UpdateLocation } from './types';
 
 // get
 export const getLocations = (token: string, skip: number, limit: number) =>
@@ -13,7 +13,7 @@ export const getLocationsFail = (error: string) =>
   action(LocationsActionTypes.GET_LOCATIONS_FAIL, error);
 
 // add
-export const addLocation = (token: string, newLocation: Location) =>
+export const addLocation = (token: string, newLocation: AddLocation) =>
   action(LocationsActionTypes.ADD_LOCATION, { token, newLocation });
 
 export const addLocationSuccess = (newLocation: Location) =>
@@ -24,7 +24,7 @@ export const addLocationFail = (error: string) =>
 
 
 // update
-export const updateLocation = (token: string, editedLocation: Location) =>
+export const updateLocation = (token: string, editedLocation: UpdateLocation) =>
   action(LocationsActionTypes.UPDATE_LOCATION, { token, editedLocation });
 
 export const updateLocationSuccess = (updatedLocation: Location) =>

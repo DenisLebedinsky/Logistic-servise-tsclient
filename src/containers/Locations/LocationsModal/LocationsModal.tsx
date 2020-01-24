@@ -1,31 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
 import { TextField, Button } from "@material-ui/core";
-import styles from './LocationModal.module.scss';
+import styles from './LocationsModal.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuth } from 'redux/reducers/auth/selectors';
+import { addLocation, updateLocation } from "redux/reducers/locations/actions";
 
-const LocationsModal = ({ token, closeModal, editLoc }) => {
-    let initialLoc = "";
-
-    const edit = editLoc.hasOwnProperty("_id");
-    if (edit) {
-        initialLoc = editLoc.title;
+interface LocationsModalFC {
+    closeModal: Function,
+    editLocation: {
+        _id: string;
+        title: string;
     }
+}
 
-    const [loc, setLoc] = useState(initialLoc);
+const LocationsModal: React.FC<LocationsModalFC> = ({ closeModal, editLocation }) => {
+    const dispatch = useDispatch();
+    const auth = useSelector(getAuth);
+
+    const edit = editLocation._id !== '';
+
+    const [title, setTitle] = useState(editLocation.title);
     const [err, setErr] = useState(false);
 
-    const sendData = async e => {
+    const sendData = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        if (!loc) {
+        if (!title) {
             setErr(true);
         } else {
-            let res;
+
             if (edit) {
-                res = await updateLocation({ id: editLoc._id, title: loc }, token);
+                dispatch(updateLocation(auth.user.token, { id: editLocation._id, title }))
+
             } else {
-                res = await createLocations({ title: loc }, token);
-            }
-            if (res !== "erroe") {
+                dispatch(addLocation(auth.user.token, { title }))
                 closeModal();
             }
         }
@@ -37,7 +45,6 @@ const LocationsModal = ({ token, closeModal, editLoc }) => {
             className={styles.container}
             noValidate
             autoComplete="off"
-            onSubmit={e => sendData(e)}
         >
             <div className={styles.formContainer}>
                 <div className={styles.itemInput}>
@@ -46,18 +53,19 @@ const LocationsModal = ({ token, closeModal, editLoc }) => {
                         label="Название"
                         type="text"
                         className={styles.textField}
-                        value={loc}
-                        onChange={e => setLoc(e.target.value)}
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
                         variant="outlined"
                         error={err}
                     />
                 </div>
                 <div className={styles.footer}>
                     <Button
-                        type="submit"
+                        type="button"
                         variant="contained"
                         color="primary"
                         className={styles.button}
+                        onClick={sendData}
                     >
                         {edit ? "Изменить" : "Создать"}
                     </Button>
