@@ -74,7 +74,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
             ]
           : [];
       const data = {
-        resiverId: stateInput.single,
+        reciverId: stateInput.single,
         transit,
         inventory: items,
         sendLocationId: auth.user.token
@@ -117,7 +117,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     label: loc.title
   }));
 
-  const getResiveLoc = () => {
+  const getReciveLoc = () => {
     const res = locationsData.locations.find(
       el => el._id === stateInput.single || el.title === stateInput.single
     );
@@ -163,7 +163,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
               id: readOnly.id,
               qr: readOnly.qr,
               location: getUserLocation(),
-              resiveLoc: getResiveLoc()
+              reciveLoc: getReciveLoc()
             }}
           />
         )}

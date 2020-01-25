@@ -27,7 +27,7 @@ function* getLocationsSaga(action: ReturnType<typeof getLocations>) {
 
     const result: any = yield api.post('/locations/', { skip, limit });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 
@@ -43,13 +43,14 @@ function* addLocationSaga(action: ReturnType<typeof addLocation>) {
 
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/location/create', newLocation);
+    const result: any = yield api.post('/locations/create', newLocation);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get update');
     }
 
     yield put(addLocationSuccess(result.data));
+    yield put(getLocations(token, 0, 1000));
   } catch (error) {
     yield put(addLocationFail(error));
   }
@@ -60,13 +61,15 @@ function* updateLocationSaga(action: ReturnType<typeof updateLocation>) {
     const { token, editedLocation } = action.payload;
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/package/update/', editedLocation);
+    const result: any = yield api.post('/locations/update/', editedLocation);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 
     yield put(updateLocationSuccess(result.data));
+
+    yield put(getLocations(token, 0, 1000));
   } catch (error) {
     yield put(updateLocationFail(error));
   }
@@ -77,13 +80,14 @@ function* deleteLocationSaga(action: ReturnType<typeof deleteLocation>) {
     const { token, id } = action.payload;
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
-    const result: any = yield api.post('/package/delete', { id });
+    const result: any = yield api.post('/locations/delete', { id });
 
     if (!result) {
       throw new Error('error with get data');
     }
 
     yield put(deleteLocationSuccess(result.data));
+    yield put(getLocations(token, 0, 1000));
   } catch (error) {
     yield put(deleteLocationFail(error));
   }

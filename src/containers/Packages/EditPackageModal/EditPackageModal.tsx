@@ -29,9 +29,9 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     ? data.inventory.map(el => ({ title: el.title, count: el.count }))
     : [];
 
-  let resiver = '';
-  if (data.resiverId.hasOwnProperty('title')) {
-    resiver = data.resiverId['title'];
+  let reciver = '';
+  if (data.reciverId.hasOwnProperty('title')) {
+    reciver = data.reciverId['title'];
   }
 
   let transit = '';
@@ -51,7 +51,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     qr: ''
   });
   const [stateInput, setStateInput] = React.useState({
-    single: resiver,
+    single: reciver,
     popper: transit
   });
 
@@ -65,10 +65,10 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     }
   });
 
-  const sendData = () =>  (e: React.ChangeEvent<HTMLInputElement>) => {
+  const sendData = () => (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    editData.resiverId = stateInput.single;
+    editData.reciverId = stateInput.single;
 
     if (data.transit && data.transit.length > 0 && editData.transit[0]) {
       if (stateInput.popper !== '') {

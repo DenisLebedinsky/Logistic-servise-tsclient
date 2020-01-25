@@ -44,14 +44,18 @@ const Barcode = ({ data }) => {
       <div id="printQR" className="barcode-notPrint" ref={componentRef}>
         {qrCount.arr.map((el, i) => (
           <div key={`qr_${i}`} className="barcode-block">
-            <img src={data.qr} alt="error restart page" className="barcode-block-img" />
+            <img
+              src={data.qr}
+              alt="error restart page"
+              className="barcode-block-img"
+            />
             <div className="barcode-block-info">
               <span className="barcode-block-value">Отправитель:</span>
               <span>{data.location}</span>
             </div>
             <div className="barcode-block-info">
               <span className="barcode-block-value">Получатель:</span>
-              <span>{data.resiveLoc}</span>
+              <span>{data.reciveLoc}</span>
             </div>
           </div>
         ))}

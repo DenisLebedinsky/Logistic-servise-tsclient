@@ -49,6 +49,7 @@ function* addUserSaga(action: ReturnType<typeof addUser>) {
     }
 
     yield put(addUserSuccess(result.data));
+    yield put(getUsers(token, 0, 1000));
   } catch (error) {
     yield put(addUserFail(error));
   }
@@ -66,6 +67,7 @@ function* updateUsersaga(action: ReturnType<typeof updateUser>) {
     }
 
     yield put(updateUserSuccess(result.data));
+    yield put(getUsers(token, 0, 1000));
   } catch (error) {
     yield put(updateUserFail(error));
   }
@@ -83,6 +85,7 @@ function* deleteUsersaga(action: ReturnType<typeof deleteUser>) {
     }
 
     yield put(deleteUserSuccess(result.data));
+    yield put(getUsers(token, 0, 1000));
   } catch (error) {
     yield put(deleteUserFail(error));
   }

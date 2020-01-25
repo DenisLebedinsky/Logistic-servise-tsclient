@@ -19,10 +19,15 @@ type PopulationField = {
 type Transit = {
   _id: string;
   date: string;
-  resivedDate: string;
+  recivedDate: string;
   sendLocId: PopulationField;
   sendfactLocId: PopulationField;
   userId: User;
+};
+
+type Note = {
+  regNumber: string;
+  driverFullname: string;
 };
 
 export type Package = {
@@ -30,14 +35,15 @@ export type Package = {
   number: number;
   sendLocationId: PopulationField;
   sendUserId: User;
-  resiverId: PopulationField;
-  factResiverId: PopulationField;
+  reciverId: PopulationField;
+  factReciverId: PopulationField;
   sendData: string;
-  resiveData: string;
+  reciveData: string;
   recipientId: User;
   inventory: Inventory[];
   transit: Transit[];
   status: string;
+  note: Note;
   comment: string;
   created: string;
   qr?: string;
@@ -48,7 +54,7 @@ type TransitEditable = {
   userId?: User;
   _id?: string;
   date?: string;
-  resivedDate?: string;
+  recivedDate?: string;
   sendfactLocId?: PopulationField | string;
 };
 
@@ -64,7 +70,7 @@ export type ReadOnly = {
 };
 
 export type addNewPackage = {
-  resiverId: string;
+  reciverId: string;
   transit: {
     date: undefined;
     sendLocId: {
@@ -82,10 +88,10 @@ export type PackageEditable = {
   number: number;
   sendLocationId: PopulationField | string;
   sendUserId: User;
-  resiverId: PopulationField | string;
-  factResiverId: PopulationField | string;
+  reciverId: PopulationField | string;
+  factReciverId: PopulationField | string;
   sendData: string;
-  resiveData: string;
+  reciveData: string;
   recipientId: User;
   inventory: Inventory[];
   transit: TransitEditable[];

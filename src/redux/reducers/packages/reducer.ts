@@ -19,7 +19,7 @@ const reducer: Reducer<PackageType> = (
 
   switch (type) {
     case PackagesActionTypes.GET_PACKAGES:
-      return { ...state, error: true, loading: true };
+      return { ...state, error: false, loading: false }; ///test
     case PackagesActionTypes.GET_PACKAGES_SUCCESS:
       return {
         ...state,
@@ -29,7 +29,7 @@ const reducer: Reducer<PackageType> = (
         count: payload.count
       };
     case PackagesActionTypes.GET_PACKAGES_FAIL:
-      return { ...state, error: true,loading: false };
+      return { ...state, error: true, loading: false };
     case PackagesActionTypes.ADD_PACKAGE_SUCCESS:
       return { ...state, addedPackage: payload };
 

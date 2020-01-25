@@ -44,8 +44,15 @@ const Users: React.FC = () => {
   };
 
   const handleClose = () => {
+    setEditUser({
+      _id: '',
+      name: '',
+      login: '',
+      phone: '',
+      role: '',
+      locationId: ''
+    });
     setOpen(false);
-    dispatch(getUsers(auth.user.token, 0, 1000));
   };
 
   const setClassnameIventory = (i: number) => {

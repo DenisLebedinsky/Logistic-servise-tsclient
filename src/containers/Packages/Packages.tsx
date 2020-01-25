@@ -34,7 +34,7 @@ export default function Packages() {
 
   const [modalData, setModalData] = useState({
     location: '',
-    resiveLoc: '',
+    reciveLoc: '',
     id: ''
   });
   const [showModal, setShowModal] = useState(false);
@@ -70,7 +70,7 @@ export default function Packages() {
     setModalData({
       id: packageItem._id,
       location: packageItem.sendLocationId && packageItem.sendLocationId.title,
-      resiveLoc: packageItem.resiverId && packageItem.resiverId.title
+      reciveLoc: packageItem.reciverId && packageItem.reciverId.title
     });
 
     setShowModal(true);
@@ -169,6 +169,7 @@ export default function Packages() {
                   <TableCell align="left">Дата создания</TableCell>
                   <TableCell align="left">Отправитель</TableCell>
                   <TableCell align="left">Начальный получатель</TableCell>
+                  <TableCell align="left">Примечание</TableCell>
                   <TableCell align="left">Фактический получатель</TableCell>
                   <TableCell align="left">Дата отправки</TableCell>
                   <TableCell align="left">Дата получения</TableCell>
@@ -211,19 +212,23 @@ export default function Packages() {
                       {packageItem.sendUserId && packageItem.sendUserId.name}
                     </TableCell>
                     <TableCell align="left">
-                      {packageItem.resiverId && packageItem.resiverId.title}
+                      {packageItem.reciverId && packageItem.reciverId.title}
                     </TableCell>
                     <TableCell align="left">
-                      {packageItem.factResiverId &&
-                        packageItem.factResiverId.title}
+                      {packageItem.note &&
+                        `ФИО ${packageItem.note.driverFullname} рег.номер ${packageItem.note.regNumber}`}
+                    </TableCell>
+                    <TableCell align="left">
+                      {packageItem.factReciverId &&
+                        packageItem.factReciverId.title}
                     </TableCell>
                     <TableCell align="left">
                       {packageItem.sendData &&
                         moment(packageItem.sendData).format('DD.MM.YYYY HH:mm')}
                     </TableCell>
                     <TableCell align="left">
-                      {packageItem.resiveData &&
-                        moment(packageItem.resiveData).format(
+                      {packageItem.reciveData &&
+                        moment(packageItem.reciveData).format(
                           'DD.MM.YYYY  HH:mm'
                         )}
                     </TableCell>
@@ -262,9 +267,9 @@ export default function Packages() {
                           </div>
                           <div className={styles.transitBlock1}>
                             {el.sendfactLocId && el.sendfactLocId.title}
-                            {el.resivedDate && (
+                            {el.recivedDate && (
                               <span>
-                                {moment(el.resivedDate).format(
+                                {moment(el.recivedDate).format(
                                   'DD.MM.YYYY  HH:mm'
                                 )}
                               </span>

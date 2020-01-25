@@ -17,7 +17,6 @@ import { addUser, updateUser } from 'redux/reducers/users/actions';
 import { UserModal, EditUser } from './types';
 import styles from './UserModal.module.scss';
 
-
 const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
   const initialUser: EditUser = {
     name: '',
@@ -36,8 +35,8 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
   const locationsData = useSelector(getLocationsFromState);
   const auth = useSelector(getAuth);
 
-  const edit = editUser._id !== "";
-
+  const edit = editUser._id !== '';
+  console.log(edit);
   if (edit) {
     initialUser.name = editUser.name;
     initialUser.login = editUser.login;
@@ -45,7 +44,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     initialUser.role = editUser.role;
     initialUser.locationId = editUser.locationId;
   }
-
+  console.log(initialUser);
   const [user, setUser] = useState(initialUser);
 
   const inputLabel = React.useRef<HTMLLabelElement>(null);
@@ -88,7 +87,6 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     ) {
       setUser({ ...user, ...dataErr });
     } else {
-
       const newUser = {
         name: user.name,
         login: user.login,
@@ -99,10 +97,8 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
       };
 
       if (edit) {
-        console.log({ ...newUser, id: editUser._id })
         dispatch(updateUser(auth.user.token, { ...newUser, id: editUser._id }));
       } else {
-        console.log(newUser)
         dispatch(addUser(auth.user.token, newUser));
       }
       closeModal();
@@ -208,7 +204,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
                 >
                   {locationsData.locations &&
                     locationsData.locations.map(option => (
-                      <MenuItem key={option._id} value={option._id}>
+                      <MenuItem key={option.title} value={option.title}>
                         {option.title}
                       </MenuItem>
                     ))}

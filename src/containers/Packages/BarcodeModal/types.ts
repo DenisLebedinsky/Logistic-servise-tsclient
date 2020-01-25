@@ -1,7 +1,7 @@
 export type Params = {
   id: string;
   location: string;
-  resiveLoc: string;
+  reciveLoc: string;
 };
 
 export interface BarcodeModalFC {
