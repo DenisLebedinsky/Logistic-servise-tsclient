@@ -15,7 +15,8 @@ import {
   getPackagesSuccess,
   updatePackage,
   updatePackageFail,
-  updatePackageSuccess
+  updatePackageSuccess,
+  changeColumnsVisible
 } from './actions';
 
 function* getPackagesSaga(action: ReturnType<typeof getPackages>) {
@@ -30,7 +31,6 @@ function* getPackagesSaga(action: ReturnType<typeof getPackages>) {
       throw new Error('error with get data');
     }
     yield put(getPackagesSuccess(result.data));
-
   } catch (error) {
     yield put(getPackagesFail(error));
   }
@@ -88,6 +88,11 @@ function* deletePackagesSaga(action: ReturnType<typeof deletePackage>) {
   }
 }
 
+function* changeColumsVisible(action: ReturnType<typeof changeColumnsVisible>) {
+  const { columns } = action.payload;
+  localStorage.setItem('columns', JSON.stringify(columns));
+}
+
 // watchers
 function* watchGetPackageSaga() {
   yield takeEvery(PackagesActionTypes.GET_PACKAGES, getPackagesSaga);
@@ -104,13 +109,21 @@ function* watchUpdatePackageSaga() {
 function* watchDeletePackageSaga() {
   yield takeEvery(PackagesActionTypes.UPDATE_PACKAGE, deletePackagesSaga);
 }
+
+function* watchColumsVisibleSaga() {
+  yield takeEvery(
+    PackagesActionTypes.CHANGE_COLUMNS_VISIBLE,
+    changeColumsVisible
+  );
+}
 // main
 function* packagesSaga() {
   yield all([
     fork(watchGetPackageSaga),
     fork(watchAddPackageSaga),
     fork(watchUpdatePackageSaga),
-    fork(watchDeletePackageSaga)
+    fork(watchDeletePackageSaga),
+    fork(watchColumsVisibleSaga)
   ]);
 }
 

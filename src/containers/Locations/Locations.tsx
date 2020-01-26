@@ -65,7 +65,11 @@ function Locations() {
       </Button>
 
       <Paper className={styles.root}>
-        <Table className={styles.table} style={{ borderColor: 'black' }}>
+        <Table
+          className={styles.table}
+          style={{ borderColor: 'black' }}
+          size="small"
+        >
           <TableHead>
             <TableRow>
               <TableCell className={styles.cellNumber}>Номер</TableCell>

@@ -26,6 +26,12 @@ table {
   padding: 0;
 }
 
+.buttonGroup {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .list {
   border-bottom: 1px solid #d7dade;
   display: flex;
@@ -108,8 +114,7 @@ table {
 
 .actions {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .action {
@@ -127,4 +132,14 @@ table {
   justify-content: center;
   margin: 20px 0;
   width: 100%;
+}
+
+.menuItems {
+  display: flex !important;
+  align-items: center !important;
+  height: 40px !important;
+}
+
+.menuIcon {
+  width: 40px;
 }

@@ -1,12 +1,20 @@
 import { Reducer } from 'redux';
 
 import { PackageType, PackagesActionTypes } from './types';
+import { allColumns } from 'constants/packages';
+
+let visibleColumns = allColumns;
+const lcoalStorageColumns = localStorage.getItem('columns');
+if (lcoalStorageColumns) {
+  visibleColumns = JSON.parse(lcoalStorageColumns);
+}
 
 const initialState: PackageType = {
   loading: false,
   error: false,
   packages: [],
   count: 0,
+  columns: visibleColumns,
   addedPackage: null,
   updatedPackage: null
 };
@@ -32,7 +40,8 @@ const reducer: Reducer<PackageType> = (
       return { ...state, error: true, loading: false };
     case PackagesActionTypes.ADD_PACKAGE_SUCCESS:
       return { ...state, addedPackage: payload };
-
+    case PackagesActionTypes.CHANGE_COLUMNS_VISIBLE:
+      return { ...state, columns: payload.columns };
     default:
       return state;
   }

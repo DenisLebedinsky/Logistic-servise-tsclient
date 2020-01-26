@@ -46,3 +46,7 @@ export const deletePackageSuccess = (deletedPackage: Package) =>
 
 export const deletePackageFail = (error: string) =>
   action(PackagesActionTypes.DELETE_PACKAGE_FAIL, error);
+
+// change columns visible
+export const changeColumnsVisible = (columns: string[]) =>
+  action(PackagesActionTypes.CHANGE_COLUMNS_VISIBLE, { columns });

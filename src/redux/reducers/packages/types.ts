@@ -105,6 +105,7 @@ export interface PackageType {
   error: boolean;
   packages: Package[];
   count: number;
+  columns: string[];
   addedPackage: Package | null;
   updatedPackage: Package | null;
 }
@@ -124,5 +125,7 @@ export enum PackagesActionTypes {
 
   DELETE_PACKAGE = '@@packages/DELETE_PACKAGE',
   DELETE_PACKAGE_SUCCESS = '@@packages/DELETE_PACKAGE_SUCCESS',
-  DELETE_PACKAGE_FAIL = '@@packages/DELETE_PACKAGE_FAIL'
+  DELETE_PACKAGE_FAIL = '@@packages/DELETE_PACKAGE_FAIL',
+
+  CHANGE_COLUMNS_VISIBLE = '@@packages/CHANGE_COLUMNS_VISIBLE'
 }
