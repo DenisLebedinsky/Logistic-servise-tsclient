@@ -44,7 +44,7 @@ function* addPackageSaga(action: ReturnType<typeof addPackage>) {
 
     const result: any = yield api.post('/package/create', newPackage);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get update');
     }
 
@@ -61,7 +61,7 @@ function* updatePackageSaga(action: ReturnType<typeof updatePackage>) {
 
     const result: any = yield api.post('/package/update/', editedPackage);
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 
@@ -78,7 +78,7 @@ function* deletePackagesSaga(action: ReturnType<typeof deletePackage>) {
 
     const result: any = yield api.post('/package/delete', { id });
 
-    if (result) {
+    if (!result) {
       throw new Error('error with get data');
     }
 

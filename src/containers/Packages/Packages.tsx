@@ -31,6 +31,7 @@ import BarcodeModal from 'containers/Packages/BarcodeModal';
 import Error from 'components/Error';
 import CreatePackageModal from 'containers/Packages/CreatePackageModal';
 import { allColumns } from 'constants/packages';
+import useReactRouter from 'use-react-router';
 
 import EditPackageModal from './EditPackageModal';
 import styles from './Packages.module.scss';
@@ -52,6 +53,7 @@ export default function Packages() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { history } = useReactRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -171,6 +173,12 @@ export default function Packages() {
       fetchData(0, rowsPerPage);
     }
   }, [data.packages]);
+
+  useEffect(() => {
+    if (!auth.user.token) {
+      history.push('/login');
+    }
+  }, [auth]);
 
   return (
     <div className={styles.container}>

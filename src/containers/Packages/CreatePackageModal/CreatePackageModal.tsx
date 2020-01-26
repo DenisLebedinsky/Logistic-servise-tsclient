@@ -7,7 +7,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
+//import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
 import Barcode from 'containers/Barcode';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLocationsFromState } from 'redux/reducers/locations/selectors';
@@ -15,6 +15,7 @@ import { getResultAdding } from 'redux/reducers/packages/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
 import { addPackage } from 'redux/reducers/packages/actions';
 import { Item, ReadOnly } from 'redux/reducers/packages/types';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { CreatePackageModalFC } from './types';
 import styles from './CreatePackageModal.module.scss';
@@ -34,14 +35,20 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     qr: '',
     id: ''
   });
-  const [stateInput, setStateInput] = React.useState({
-    single: '',
-    popper: ''
-  });
+  // const [stateInput, setStateInput] = useState({
+  //   single: '',
+  //   popper: ''
+  // });
+
+  //адрес получателя
+  const [reciverId, setReciverId] = useState('');
+  // первый транзитный пункт
+  const [sendLocIdTitle, setSendLocIdTitle] = useState('');
 
   const locationsData = useSelector(getLocationsFromState);
   const resultAdding = useSelector(getResultAdding);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!locationsData.locations.length && !locationsData.loading) {
       dispatch(getLocations(auth.user.token, 0, 1000));
@@ -49,7 +56,9 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   });
 
   useEffect(() => {
+    console.log(resultAdding);
     if (created && resultAdding) {
+      console.log(123123);
       setReadOnly({
         qr: resultAdding.qr || '',
         status: true,
@@ -59,30 +68,56 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     }
   });
 
-  const sendData = () => async (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (stateInput.single) {
+  const getReciverId = () => {
+    return (
+      locationsData.locations.find(location => location.title === reciverId)
+        ?.title || ''
+    );
+  };
+
+  // const getsendLocId = () => {
+  //   return (
+  //     locationsData.locations.find(
+  //       location => location.title === sendLocIdTitle
+  //     )?._id || ''
+  //   );
+  // };
+
+  const sendData = () => {
+    if (reciverId) {
       const transit =
-        stateInput.popper !== ''
+        sendLocIdTitle !== ''
           ? [
               {
                 date: undefined,
-                sendLocId: { title: stateInput.popper },
+                sendLocId: { title: sendLocIdTitle },
                 sendfactLocId: undefined,
                 userId: undefined
               }
             ]
           : [];
       const data = {
-        reciverId: stateInput.single,
+        reciverId: getReciverId(),
         transit,
         inventory: items,
-        sendLocationId: auth.user.token
+        sendLocationId: auth.user.locationId,
+        sendUserId: auth.user.id
       };
 
       dispatch(addPackage(auth.user.token, data));
-
       setCreated(true);
+    }
+  };
+
+  const changeReciverId = (event: ChangeEvent<{}>, value: string | null) => {
+    if (value) {
+      setReciverId(value);
+    }
+  };
+
+  const changeSendLocId = (event: ChangeEvent<{}>, value: string | null) => {
+    if (value) {
+      setSendLocIdTitle(value);
     }
   };
 
@@ -113,20 +148,16 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     setItems(newItems);
   };
 
-  const suggestions = locationsData.locations.map(loc => ({
-    label: loc.title
-  }));
-
   const getReciveLoc = () => {
     const res = locationsData.locations.find(
-      el => el._id === stateInput.single || el.title === stateInput.single
+      el => el._id === reciverId || el.title === reciverId
     );
 
     if (res) {
       return res.title;
     }
 
-    return stateInput.single;
+    return reciverId;
   };
 
   const getUserLocation = () => {
@@ -146,7 +177,6 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
       className={styles.container}
       noValidate
       autoComplete="off"
-      onSubmit={sendData}
     >
       <div className={styles.formContainer}>
         <div className={styles.closeIcon}>
@@ -171,16 +201,54 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
         {readOnly.status ? (
           <div>
             <span>Адрес получателя:</span>
-            <h3>{stateInput.single}</h3>
+            <h3>{reciverId}</h3>
             <span>Первый транзитный пункт:</span>
-            <h3>{stateInput.popper}</h3>
+            <h3>{sendLocIdTitle}</h3>
           </div>
         ) : (
-          <AutoSelectLocation
-            suggestions={suggestions}
-            stateInput={stateInput}
-            setStateInput={setStateInput}
-          />
+          <div>
+            <Autocomplete
+              freeSolo
+              id="reciverId"
+              disableClearable
+              onChange={changeReciverId}
+              options={locationsData.locations.map(option => option.title)}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label="Адрес получателя"
+                  margin="normal"
+                  variant="outlined"
+                  placeholder="Введите адрес"
+                  fullWidth
+                  InputProps={{ ...params.InputProps, type: 'search' }}
+                />
+              )}
+            />
+            <Autocomplete
+              freeSolo
+              id="changeSendLocId"
+              disableClearable
+              onChange={changeSendLocId}
+              options={locationsData.locations.map(option => option.title)}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label="Первый транзитный пункт"
+                  placeholder="Введите адрес"
+                  margin="normal"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{ ...params.InputProps, type: 'search' }}
+                />
+              )}
+            />
+          </div>
+          // <AutoSelectLocation
+          //   suggestions={suggestions}
+          //   stateInput={stateInput}
+          //   setStateInput={setStateInput}
+          // />
         )}
 
         <div>
@@ -231,10 +299,11 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
         {!readOnly.status && (
           <div className={styles.footer}>
             <Button
-              type="submit"
+              type="button"
               variant="contained"
               color="primary"
               className={styles.button}
+              onClick={sendData}
             >
               Создать
             </Button>
