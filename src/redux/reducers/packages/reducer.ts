@@ -27,7 +27,7 @@ const reducer: Reducer<PackageType> = (
 
   switch (type) {
     case PackagesActionTypes.GET_PACKAGES:
-      return { ...state, error: false, loading: false }; ///test
+      return { ...state, error: false, loading: false };
     case PackagesActionTypes.GET_PACKAGES_SUCCESS:
       return {
         ...state,
@@ -40,6 +40,10 @@ const reducer: Reducer<PackageType> = (
       return { ...state, error: true, loading: false };
     case PackagesActionTypes.ADD_PACKAGE_SUCCESS:
       return { ...state, addedPackage: payload };
+    case PackagesActionTypes.UPDATE_PACKAGE_SUCCESS:
+      return { ...state, updatedPackage: payload };
+    case PackagesActionTypes.CLEAR_MODAL:
+      return { ...state, addedPackage: null, updatedPackage: null };
     case PackagesActionTypes.CHANGE_COLUMNS_VISIBLE:
       return { ...state, columns: payload.columns };
     default:

@@ -10,3 +10,5 @@ export const getQRCodeSuccess = (qrCode: QRCode) =>
 
 export const getQRCodeFail = (error: string) =>
   action(QRCodeActionTypes.GET_QR_CODE_FAIL, error);
+
+export const clearQRcode = () => action(QRCodeActionTypes.CLEAR_QR_CODE);

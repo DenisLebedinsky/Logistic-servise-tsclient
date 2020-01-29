@@ -24,6 +24,7 @@ import { Package, PackageType } from 'redux/reducers/packages/types';
 import { getAuth } from 'redux/reducers/auth/selectors';
 import {
   getPackages,
+  clearModalStart,
   changeColumnsVisible
 } from 'redux/reducers/packages/actions';
 import { getPackagesFromState } from 'redux/reducers/packages/selectors';
@@ -32,6 +33,7 @@ import Error from 'components/Error';
 import CreatePackageModal from 'containers/Packages/CreatePackageModal';
 import { allColumns } from 'constants/packages';
 import useReactRouter from 'use-react-router';
+import { clearQRcode } from 'redux/reducers/qrCode/actions';
 
 import EditPackageModal from './EditPackageModal';
 import styles from './Packages.module.scss';
@@ -83,12 +85,6 @@ export default function Packages() {
     dispatch(getPackages(auth.user.token, skip, limit));
   };
 
-  const deletePackage = async (id: string) => {
-    await deletePackage(id);
-    setShowEditModal(false);
-    fetchData(0, rowsPerPage);
-  };
-
   // edit modal
   const handleOpenEdit = (index: number) => {
     setCurrentIndex(index);
@@ -113,8 +109,19 @@ export default function Packages() {
 
   const closeModal = () => {
     setShowModal(false);
+    setModalData({
+      location: '',
+      reciveLoc: '',
+      id: ''
+    });
   };
 
+  useEffect(() => {
+    if (!showModal) {
+      dispatch(clearModalStart());
+      dispatch(clearQRcode());
+    }
+  }, [showModal]);
   //---------
 
   const converStatus = (status: string) => {
@@ -497,7 +504,6 @@ export default function Packages() {
             <EditPackageModal
               data={data.packages[currentIndex]}
               closeModal={closeEdit}
-              deletePackage={deletePackage}
             />
           </div>
         </Fade>

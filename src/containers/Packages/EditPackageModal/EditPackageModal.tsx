@@ -6,55 +6,66 @@ import AddCircle from '@material-ui/icons/AddCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
 
-import AutoSelectLocation from 'components/Locations/AutoSelectLocation';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getAuth } from 'redux/reducers/auth/selectors';
-import { updatePackage } from 'redux/reducers/packages/actions';
+import { updatePackage, deletePackage } from 'redux/reducers/packages/actions';
 import { getLocationsFromState } from 'redux/reducers/locations/selectors';
 import { getLocations } from 'redux/reducers/locations/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import { PackageEditable } from 'redux/reducers/packages/types';
 
 import styles from './EditPackageModal.module.scss';
 import { EditPackageModalFC } from './types';
+import { getResultUpdating } from 'redux/reducers/packages/selectors';
 
-const ModalFormEdit: React.FC<EditPackageModalFC> = ({
-  data,
-  closeModal,
-  deletePackage
-}) => {
+const ModalFormEdit: React.FC<EditPackageModalFC> = ({ data, closeModal }) => {
   const editData: PackageEditable = { ...data };
 
   const dataItems = data.inventory
     ? data.inventory.map(el => ({ title: el.title, count: el.count }))
     : [];
 
-  let reciver = '';
-  if (data.reciverId.hasOwnProperty('title')) {
-    reciver = data.reciverId['title'];
-  }
-
-  let transit = '';
-
-  if (data.transit.length > 0 && data.transit[0].sendLocId) {
-    transit = data.transit[0].sendLocId.title;
-  }
-
   const dispatch = useDispatch();
   const locationsState = useSelector(getLocationsFromState);
+  const resultUpdating = useSelector(getResultUpdating);
   const { user } = useSelector(getAuth);
   const [items, setItems] = useState(dataItems);
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(1);
   const [readOnly, setReadOnly] = useState({
     status: false,
-    qr: ''
-  });
-  const [stateInput, setStateInput] = React.useState({
-    single: reciver,
-    popper: transit
+    qr: '',
+    id: ''
   });
 
+  let initialSendLocIdTitle = '';
+  if (data.transit.length && typeof data.transit[0].sendLocId !== 'string') {
+    initialSendLocIdTitle = data.transit[0].sendLocId.title;
+  }
+
+  let initialReciverId = '';
+
+  if (typeof data.reciverId !== 'string') {
+    initialReciverId = data.reciverId.title;
+  }
+
+  //адрес получателя
+  const [reciverId, setReciverId] = useState(initialReciverId);
+  // первый транзитный пункт
+  const [sendLocIdTitle, setSendLocIdTitle] = useState(initialSendLocIdTitle);
+
+  const changeReciverId = (event: ChangeEvent<{}>, value: string | null) => {
+    if (value) {
+      setReciverId(value);
+    }
+  };
+
+  const changeSendLocId = (event: ChangeEvent<{}>, value: string | null) => {
+    if (value) {
+      setSendLocIdTitle(value);
+    }
+  };
   const getLoc = () => {
     dispatch(getLocations(user.token, 0, 1000));
   };
@@ -65,22 +76,30 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     }
   });
 
-  const sendData = () => (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (resultUpdating) {
+      setReadOnly({
+        qr: resultUpdating.qr || '',
+        status: true,
+        id: resultUpdating._id
+      });
+    }
+  });
 
-    editData.reciverId = stateInput.single;
+  const sendData = () => {
+    editData.reciverId = reciverId;
 
     if (data.transit && data.transit.length > 0 && editData.transit[0]) {
-      if (stateInput.popper !== '') {
-        editData.transit[0].sendLocId = { title: stateInput.popper };
+      if (sendLocIdTitle !== '') {
+        editData.transit[0].sendLocId = { title: sendLocIdTitle };
       }
       editData.transit[0].sendLocId =
-        stateInput.popper !== '' ? { title: stateInput.popper } : '';
-    } else if (stateInput.popper !== '') {
+        sendLocIdTitle !== '' ? { title: sendLocIdTitle } : '';
+    } else if (sendLocIdTitle !== '') {
       editData.transit = [
         {
           sendLocId: {
-            title: stateInput.popper
+            title: sendLocIdTitle
           }
         }
       ];
@@ -91,14 +110,13 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     editData.inventory = items;
 
     dispatch(updatePackage(user.token, editData));
-    setReadOnly({ status: true, qr: '13123' });
   };
 
-  const changeTitle = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const changeCount = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeCount = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCount(parseInt(event.target.value, 10));
   };
 
@@ -121,9 +139,13 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
     closeModal();
   };
 
-  const suggestions = locationsState.locations.map(loc => ({
-    label: loc.title
-  }));
+  const removePackage = () => {
+    dispatch(deletePackage(user.token, data._id));
+    closeModal(true);
+  };
+  // const suggestions = locationsState.locations.map(loc => ({
+  //   label: loc.title
+  // }));
 
   return (
     <form
@@ -131,7 +153,6 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
       className={styles.container}
       noValidate
       autoComplete="off"
-      onSubmit={sendData}
     >
       <div className={styles.formContainer}>
         <div className={styles.closeIcon}>
@@ -142,16 +163,51 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
         {readOnly.status ? (
           <div>
             <span>Адрес получателя:</span>
-            <h3>{stateInput.single}</h3>
+            <h3>{reciverId}</h3>
             <span>Первый транзитный пункт:</span>
-            <h3>{stateInput.popper}</h3>
+            <h3>{sendLocIdTitle}</h3>
           </div>
         ) : (
-          <AutoSelectLocation
-            suggestions={suggestions}
-            stateInput={stateInput}
-            setStateInput={setStateInput}
-          />
+          <div>
+            <Autocomplete
+              freeSolo
+              id="reciverId"
+              disableClearable
+              value={reciverId}
+              onChange={changeReciverId}
+              options={locationsState.locations.map(option => option.title)}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label="Адрес получателя"
+                  margin="normal"
+                  variant="outlined"
+                  placeholder="Введите адрес"
+                  fullWidth
+                  InputProps={{ ...params.InputProps, type: 'search' }}
+                />
+              )}
+            />
+            <Autocomplete
+              freeSolo
+              id="changeSendLocId"
+              disableClearable
+              value={sendLocIdTitle}
+              onChange={changeSendLocId}
+              options={locationsState.locations.map(option => option.title)}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label="Первый транзитный пункт"
+                  placeholder="Введите адрес"
+                  margin="normal"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{ ...params.InputProps, type: 'search' }}
+                />
+              )}
+            />
+          </div>
         )}
 
         <div>
@@ -205,16 +261,17 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({
               variant="contained"
               color="secondary"
               className={styles.qrElement}
-              onClick={() => deletePackage(data._id)}
+              onClick={removePackage}
             >
               Удалить
             </Button>
 
             <Button
-              type="submit"
+              type="button"
               variant="contained"
               color="primary"
               className={styles.button}
+              onClick={sendData}
             >
               изменить
             </Button>

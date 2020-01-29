@@ -60,7 +60,7 @@ function* updatePackageSaga(action: ReturnType<typeof updatePackage>) {
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
     const result: any = yield api.post('/package/update/', editedPackage);
-
+    console.log('000');
     if (!result) {
       throw new Error('error with get data');
     }
@@ -88,7 +88,7 @@ function* deletePackagesSaga(action: ReturnType<typeof deletePackage>) {
   }
 }
 
-function* changeColumsVisible(action: ReturnType<typeof changeColumnsVisible>) {
+function changeColumsVisible(action: ReturnType<typeof changeColumnsVisible>) {
   const { columns } = action.payload;
   localStorage.setItem('columns', JSON.stringify(columns));
 }
@@ -107,7 +107,7 @@ function* watchUpdatePackageSaga() {
 }
 
 function* watchDeletePackageSaga() {
-  yield takeEvery(PackagesActionTypes.UPDATE_PACKAGE, deletePackagesSaga);
+  yield takeEvery(PackagesActionTypes.DELETE_PACKAGE, deletePackagesSaga);
 }
 
 function* watchColumsVisibleSaga() {

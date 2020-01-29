@@ -56,9 +56,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   });
 
   useEffect(() => {
-    console.log(resultAdding);
     if (created && resultAdding) {
-      console.log(123123);
       setReadOnly({
         qr: resultAdding.qr || '',
         status: true,
@@ -105,7 +103,6 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
       };
 
       dispatch(addPackage(auth.user.token, data));
-      setCreated(true);
     }
   };
 

@@ -17,7 +17,8 @@ const BarcodeModal: React.FC<BarcodeModalFC> = ({ data, closeModal }) => {
   const auth = useSelector(getAuth);
 
   useEffect(() => {
-    if (!qrCode) {
+    if (!qrCode && data.id) {
+      console.log(data.id);
       dispatch(getQRCode(auth.user.token, data.id));
     }
   });

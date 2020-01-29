@@ -127,5 +127,7 @@ export enum PackagesActionTypes {
   DELETE_PACKAGE_SUCCESS = '@@packages/DELETE_PACKAGE_SUCCESS',
   DELETE_PACKAGE_FAIL = '@@packages/DELETE_PACKAGE_FAIL',
 
+  CLEAR_MODAL = '@@packages/CLEAR_MODAL',
+
   CHANGE_COLUMNS_VISIBLE = '@@packages/CHANGE_COLUMNS_VISIBLE'
 }
