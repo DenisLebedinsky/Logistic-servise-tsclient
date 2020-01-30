@@ -23,22 +23,36 @@ const reducer: Reducer<Auth> = (state: Auth = initialState, action) => {
   switch (type) {
     case AuthActionTypes.LOG_IN:
       return state;
-    case AuthActionTypes.LOG_IN_SUCCESS:
+    
+      case AuthActionTypes.LOG_IN_SUCCESS:
       return { ...state, ...payload };
-    case AuthActionTypes.LOG_IN_FAIL:
+    
+      case AuthActionTypes.LOG_IN_FAIL:
       return { ...state, error: true };
-    case AuthActionTypes.LOG_OUT: {
-      const newState = { ...initialState };
-      newState.user.token = '';
-      return state;
-    }
+
+    case AuthActionTypes.LOG_OUT:
+      return {
+        loading: false,
+        user: {
+          username: '',
+          token: '',
+          role: '',
+          locationId: '',
+          id: ''
+        },
+        error: false
+      };
+
     case AuthActionTypes.GET_USER_INFO:
       return state;
-    case AuthActionTypes.GET_USER_INFO_SUCCESS:
+    
+      case AuthActionTypes.GET_USER_INFO_SUCCESS:
       return { ...state, user: payload };
-    case AuthActionTypes.GET_USER_INFO_FAIL:
+    
+      case AuthActionTypes.GET_USER_INFO_FAIL:
       return { ...state, erroe: true };
-    default:
+    
+      default:
       return state;
   }
 };

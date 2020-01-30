@@ -145,7 +145,7 @@ export default function Packages() {
   };
 
   const statusClass = (status: string): string => {
-    if (status === 'accepted') {
+    if (status === 'accepted' || status.toLowerCase() === 'доставлено') {
       return styles.StatusDelivered;
     }
 
@@ -173,6 +173,10 @@ export default function Packages() {
 
   const closeCreateModal = () => {
     setShowModalCreate(false);
+    
+    setTimeout(
+      () => fetchData(page*rowsPerPage, rowsPerPage),
+       1000)
   };
 
   useEffect(() => {

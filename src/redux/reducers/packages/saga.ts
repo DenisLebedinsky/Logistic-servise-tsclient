@@ -60,7 +60,7 @@ function* updatePackageSaga(action: ReturnType<typeof updatePackage>) {
     api.defaults.headers.common.Authorization = `Baerer ${token}`;
 
     const result: any = yield api.post('/package/update/', editedPackage);
-    console.log('000');
+
     if (!result) {
       throw new Error('error with get data');
     }

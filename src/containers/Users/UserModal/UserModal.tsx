@@ -36,7 +36,7 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
   const auth = useSelector(getAuth);
 
   const edit = editUser._id !== '';
-  console.log(edit);
+
   if (edit) {
     initialUser.name = editUser.name;
     initialUser.login = editUser.login;
@@ -44,7 +44,6 @@ const ModalForm: React.FC<UserModal> = ({ closeModal, editUser }) => {
     initialUser.role = editUser.role;
     initialUser.locationId = editUser.locationId;
   }
-  console.log(initialUser);
   const [user, setUser] = useState(initialUser);
 
   const inputLabel = React.useRef<HTMLLabelElement>(null);

@@ -73,14 +73,6 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     );
   };
 
-  // const getsendLocId = () => {
-  //   return (
-  //     locationsData.locations.find(
-  //       location => location.title === sendLocIdTitle
-  //     )?._id || ''
-  //   );
-  // };
-
   const sendData = () => {
     if (reciverId) {
       const transit =
@@ -103,6 +95,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
       };
 
       dispatch(addPackage(auth.user.token, data));
+      closeModal();
     }
   };
 
@@ -205,9 +198,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
         ) : (
           <div>
             <Autocomplete
-              freeSolo
               id="reciverId"
-              disableClearable
               onChange={changeReciverId}
               options={locationsData.locations.map(option => option.title)}
               renderInput={params => (
@@ -223,9 +214,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
               )}
             />
             <Autocomplete
-              freeSolo
               id="changeSendLocId"
-              disableClearable
               onChange={changeSendLocId}
               options={locationsData.locations.map(option => option.title)}
               renderInput={params => (
@@ -241,11 +230,6 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
               )}
             />
           </div>
-          // <AutoSelectLocation
-          //   suggestions={suggestions}
-          //   stateInput={stateInput}
-          //   setStateInput={setStateInput}
-          // />
         )}
 
         <div>

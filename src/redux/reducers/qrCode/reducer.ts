@@ -4,7 +4,7 @@ import { QRCodeActionTypes, QRCodeType } from './types';
 
 const initialState: QRCodeType = {
   error: false,
-  loading: false,
+  loading: true,
   qr: ''
 };
 

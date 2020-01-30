@@ -10,7 +10,7 @@ if (lcoalStorageColumns) {
 }
 
 const initialState: PackageType = {
-  loading: false,
+  loading: true,
   error: false,
   packages: [],
   count: 0,
@@ -27,7 +27,7 @@ const reducer: Reducer<PackageType> = (
 
   switch (type) {
     case PackagesActionTypes.GET_PACKAGES:
-      return { ...state, error: false, loading: false };
+      return { ...state, error: false, loading: true };
     case PackagesActionTypes.GET_PACKAGES_SUCCESS:
       return {
         ...state,
