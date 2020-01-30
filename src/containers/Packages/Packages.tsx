@@ -173,10 +173,8 @@ export default function Packages() {
 
   const closeCreateModal = () => {
     setShowModalCreate(false);
-    
-    setTimeout(
-      () => fetchData(page*rowsPerPage, rowsPerPage),
-       1000)
+
+    setTimeout(() => fetchData(page * rowsPerPage, rowsPerPage), 1000);
   };
 
   useEffect(() => {
@@ -438,12 +436,14 @@ export default function Packages() {
 
                     <TableCell align="center">
                       <div className={styles.actions}>
-                        {packageItem.status === 'notSent' && (
-                          <EditIcon
-                            className={styles.action}
-                            onClick={() => handleOpenEdit(indexRow)}
-                          />
-                        )}
+                        {packageItem.status === 'notSent' &&
+                          auth.user.role ===
+                            'admin' && (
+                              <EditIcon
+                                className={styles.action}
+                                onClick={() => handleOpenEdit(indexRow)}
+                              />
+                            )}
                         <FileIcon
                           className={styles.action}
                           onClick={() => handleOpenModalBarcode(packageItem)}
