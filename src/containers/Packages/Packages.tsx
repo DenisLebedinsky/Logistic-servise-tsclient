@@ -290,7 +290,7 @@ export default function Packages() {
                         <div className={styles.transitBlock2}>
                           Дата отправки с транзитного склада
                         </div>
-                        <div className={styles.transitBlock3}>Отправитель</div>
+                        <div className={styles.transitBlock3}>Транзитный отправитель</div>
                       </div>
                     </TableCell>
                   )}
