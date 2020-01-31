@@ -55,7 +55,7 @@ const Barcode = ({ data }) => {
             </div>
             <div className="barcode-block-info">
               <span className="barcode-block-value">Получатель:</span>
-              <span>{data.reciveLoc}</span>
+              <span>{data.resiveLoc}</span>
             </div>
           </div>
         ))}

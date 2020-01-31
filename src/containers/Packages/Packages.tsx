@@ -45,7 +45,7 @@ export default function Packages() {
 
   const [modalData, setModalData] = useState({
     location: '',
-    reciveLoc: '',
+    resiveLoc: '',
     id: ''
   });
   const [showModal, setShowModal] = useState(false);
@@ -101,7 +101,7 @@ export default function Packages() {
     setModalData({
       id: packageItem._id,
       location: packageItem.sendLocationId && packageItem.sendLocationId.title,
-      reciveLoc: packageItem.reciverId && packageItem.reciverId.title
+      resiveLoc: packageItem.resiverId && packageItem.resiverId.title
     });
 
     setShowModal(true);
@@ -111,7 +111,7 @@ export default function Packages() {
     setShowModal(false);
     setModalData({
       location: '',
-      reciveLoc: '',
+      resiveLoc: '',
       id: ''
     });
   };
@@ -329,7 +329,7 @@ export default function Packages() {
                     )}
                     {checkColumn('Начальный получатель') && (
                       <TableCell align="left">
-                        {packageItem.reciverId && packageItem.reciverId.title}
+                        {packageItem.resiverId && packageItem.resiverId.title}
                       </TableCell>
                     )}
                     {checkColumn('Примечание') && (
@@ -340,8 +340,8 @@ export default function Packages() {
                     )}
                     {checkColumn('Фактический получатель') && (
                       <TableCell align="left">
-                        {packageItem.factReciverId &&
-                          packageItem.factReciverId.title}
+                        {packageItem.factResiverId &&
+                          packageItem.factResiverId.title}
                       </TableCell>
                     )}
                     {checkColumn('Дата отправки') && (
@@ -354,8 +354,8 @@ export default function Packages() {
                     )}
                     {checkColumn('Дата получения') && (
                       <TableCell align="left">
-                        {packageItem.reciveData &&
-                          moment(packageItem.reciveData).format(
+                        {packageItem.resiveData &&
+                          moment(packageItem.resiveData).format(
                             'DD.MM.YYYY  HH:mm'
                           )}
                       </TableCell>
@@ -401,9 +401,9 @@ export default function Packages() {
                             </div>
                             <div className={styles.transitBlock1}>
                               {el.sendfactLocId && el.sendfactLocId.title}
-                              {el.recivedDate && (
+                              {el.resivedDate && (
                                 <span>
-                                  {moment(el.recivedDate).format(
+                                  {moment(el.resivedDate).format(
                                     'DD.MM.YYYY  HH:mm'
                                   )}
                                 </span>
@@ -436,9 +436,9 @@ export default function Packages() {
 
                     <TableCell align="center">
                       <div className={styles.actions}>
-                        {packageItem.status === 'notSent' &&
-                          auth.user.role ===
-                            'admin' && (
+                        {(packageItem.status === 'notSent' ||
+                         packageItem.status === 'не отправлено' ||
+                         auth.user.role === 'admin') && (
                               <EditIcon
                                 className={styles.action}
                                 onClick={() => handleOpenEdit(indexRow)}

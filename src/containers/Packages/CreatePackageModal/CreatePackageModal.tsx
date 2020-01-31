@@ -41,7 +41,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
   // });
 
   //адрес получателя
-  const [reciverId, setReciverId] = useState('');
+  const [resiverId, setResiverId] = useState('');
   // первый транзитный пункт
   const [sendLocIdTitle, setSendLocIdTitle] = useState('');
 
@@ -66,15 +66,15 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     }
   });
 
-  const getReciverId = () => {
+  const getResiverId = () => {
     return (
-      locationsData.locations.find(location => location.title === reciverId)
+      locationsData.locations.find(location => location.title === resiverId)
         ?.title || ''
     );
   };
 
   const sendData = () => {
-    if (reciverId) {
+    if (resiverId) {
       const transit =
         sendLocIdTitle !== ''
           ? [
@@ -87,7 +87,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
             ]
           : [];
       const data = {
-        reciverId: getReciverId(),
+        resiverId: getResiverId(),
         transit,
         inventory: items,
         sendLocationId: auth.user.locationId,
@@ -99,9 +99,9 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     }
   };
 
-  const changeReciverId = (event: ChangeEvent<{}>, value: string | null) => {
+  const changeResiverId = (event: ChangeEvent<{}>, value: string | null) => {
     if (value) {
-      setReciverId(value);
+      setResiverId(value);
     }
   };
 
@@ -138,16 +138,16 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
     setItems(newItems);
   };
 
-  const getReciveLoc = () => {
+  const getResiveLoc = () => {
     const res = locationsData.locations.find(
-      el => el._id === reciverId || el.title === reciverId
+      el => el._id === resiverId || el.title === resiverId
     );
 
     if (res) {
       return res.title;
     }
 
-    return reciverId;
+    return resiverId;
   };
 
   const getUserLocation = () => {
@@ -183,7 +183,7 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
               id: readOnly.id,
               qr: readOnly.qr,
               location: getUserLocation(),
-              reciveLoc: getReciveLoc()
+              resiveLoc: getResiveLoc()
             }}
           />
         )}
@@ -191,15 +191,15 @@ const ModalForm: React.FC<CreatePackageModalFC> = ({
         {readOnly.status ? (
           <div>
             <span>Адрес получателя:</span>
-            <h3>{reciverId}</h3>
+            <h3>{resiverId}</h3>
             <span>Первый транзитный пункт:</span>
             <h3>{sendLocIdTitle}</h3>
           </div>
         ) : (
           <div>
             <Autocomplete
-              id="reciverId"
-              onChange={changeReciverId}
+              id="resiverId"
+              onChange={changeResiverId}
               options={locationsData.locations.map(option => option.title)}
               renderInput={params => (
                 <TextField

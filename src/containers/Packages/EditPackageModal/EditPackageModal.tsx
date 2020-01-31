@@ -44,20 +44,20 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({ data, closeModal }) => {
     initialSendLocIdTitle = data.transit[0].sendLocId.title;
   }
 
-  let initialReciverId = '';
+  let initialResiverId = '';
 
-  if (typeof data.reciverId !== 'string') {
-    initialReciverId = data.reciverId.title;
+  if (typeof data.resiverId !== 'string') {
+    initialResiverId = data.resiverId.title;
   }
 
   //адрес получателя
-  const [reciverId, setReciverId] = useState(initialReciverId);
+  const [resiverId, setResiverId] = useState(initialResiverId);
   // первый транзитный пункт
   const [sendLocIdTitle, setSendLocIdTitle] = useState(initialSendLocIdTitle);
 
-  const changeReciverId = (event: ChangeEvent<{}>, value: string | null) => {
+  const changeResiverId = (event: ChangeEvent<{}>, value: string | null) => {
     if (value) {
-      setReciverId(value);
+      setResiverId(value);
     }
   };
 
@@ -87,7 +87,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({ data, closeModal }) => {
   });
 
   const sendData = () => {
-    editData.reciverId = reciverId;
+    editData.resiverId = resiverId;
 
     if (data.transit && data.transit.length > 0 && editData.transit[0]) {
       if (sendLocIdTitle !== '') {
@@ -163,7 +163,7 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({ data, closeModal }) => {
         {readOnly.status ? (
           <div>
             <span>Адрес получателя:</span>
-            <h3>{reciverId}</h3>
+            <h3>{resiverId}</h3>
             <span>Первый транзитный пункт:</span>
             <h3>{sendLocIdTitle}</h3>
           </div>
@@ -171,10 +171,10 @@ const ModalFormEdit: React.FC<EditPackageModalFC> = ({ data, closeModal }) => {
           <div>
             <Autocomplete
               freeSolo
-              id="reciverId"
+              id="resiverId"
               disableClearable
-              value={reciverId}
-              onChange={changeReciverId}
+              value={resiverId}
+              onChange={changeResiverId}
               options={locationsState.locations.map(option => option.title)}
               renderInput={params => (
                 <TextField

@@ -19,7 +19,7 @@ type PopulationField = {
 type Transit = {
   _id: string;
   date: string;
-  recivedDate: string;
+  resivedDate: string;
   sendLocId: PopulationField;
   sendfactLocId: PopulationField;
   userId: User;
@@ -35,10 +35,10 @@ export type Package = {
   number: number;
   sendLocationId: PopulationField;
   sendUserId: User;
-  reciverId: PopulationField;
-  factReciverId: PopulationField;
+  resiverId: PopulationField;
+  factResiverId: PopulationField;
   sendData: string;
-  reciveData: string;
+  resiveData: string;
   recipientId: User;
   inventory: Inventory[];
   transit: Transit[];
@@ -54,7 +54,7 @@ type TransitEditable = {
   userId?: User;
   _id?: string;
   date?: string;
-  recivedDate?: string;
+  resivedDate?: string;
   sendfactLocId?: PopulationField | string;
 };
 
@@ -70,7 +70,7 @@ export type ReadOnly = {
 };
 
 export type addNewPackage = {
-  reciverId: string;
+  resiverId: string;
   transit: {
     date: undefined;
     sendLocId: {
@@ -88,10 +88,10 @@ export type PackageEditable = {
   number: number;
   sendLocationId: PopulationField | string;
   sendUserId: User;
-  reciverId: PopulationField | string;
-  factReciverId: PopulationField | string;
+  resiverId: PopulationField | string;
+  factResiverId: PopulationField | string;
   sendData: string;
-  reciveData: string;
+  resiveData: string;
   recipientId: User;
   inventory: Inventory[];
   transit: TransitEditable[];
